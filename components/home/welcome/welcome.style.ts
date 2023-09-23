@@ -1,7 +1,8 @@
-import { StyleSheet } from "react-native";
+import {StyleSheet} from "react-native";
 
-import { COLORS, FONT, SIZES } from "../../../constants";
+import {COLORS, FONT, SIZES} from "@/constants";
 
+// @ts-ignore
 const styles = StyleSheet.create({
   container: {
     width: "100%",
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: SIZES.medium,
   },
-  tab: (activeJobType, item) => ({
+  tab: (activeJobType: string, item: string) => ({
     paddingVertical: SIZES.small / 2,
     paddingHorizontal: SIZES.small,
     borderRadius: SIZES.medium,

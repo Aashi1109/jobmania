@@ -1,0 +1,4 @@
+authentication
+Modal for profile
+Sidebar
+Favourites

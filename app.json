@@ -8,6 +8,21 @@
       "expo-router"
     ],
     "name": "jobmania",
-    "slug": "jobmania"
+    "slug": "jobmania",
+    "experiments": {
+      "tsconfigPaths": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "4b1ffde7-ab6e-449a-89cd-a9ad64283c3b"
+      }
+    },
+    "android": {
+      "package": "com.aashishpal.jobmania"
+    }
   }
 }
+

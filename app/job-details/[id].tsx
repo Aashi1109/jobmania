@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
-import { COLORS, icons, SIZES } from "../../constants";
+import { COLORS, icons, JOB_DETAILS_TABS, SIZES } from "../../constants";
 import useFetch from "../../hooks/useFetch";
 import {
   Company,
@@ -19,12 +19,11 @@ import {
 } from "../../components";
 import { useCallback, useState } from "react";
 
-const tabs = ["About", "Qualifications", "Responsibilities"];
 const JobDetails = () => {
   const params = useGlobalSearchParams();
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
-  const [activeTab, setActiveTab] = useState(tabs[0]);
+  const [activeTab, setActiveTab] = useState(JOB_DETAILS_TABS[0]);
 
   const { isLoading, error, data, refetch } = useFetch("job-details", {
     job_id: params.id,
@@ -38,18 +37,18 @@ const JobDetails = () => {
 
   const displayTabContent = () => {
     switch (activeTab) {
-      case "Qualifications":
+      case JOB_DETAILS_TABS[1]:
         return (
           <Specifics
             title={"Qualifications"}
             points={data[0].job_highlights?.Qualifications ?? ["N/A"]}
           />
         );
-      case "About":
+      case JOB_DETAILS_TABS[0]:
         return (
           <JobAbout info={data[0]?.job_description ?? "No data provided"} />
         );
-      case "Responsibilities":
+      case JOB_DETAILS_TABS[2]:
         return (
           <Specifics
             title={"Responsibilities"}
@@ -75,7 +74,11 @@ const JobDetails = () => {
             />
           ),
           headerRight: () => (
-            <ScreenHeaderBtn iconUrl={icons.share} dimension={"60%"} />
+            <ScreenHeaderBtn
+              iconUrl={icons.share}
+              dimension={"60%"}
+              handlePress={undefined}
+            />
           ),
           headerTitle: "",
         }}
@@ -103,7 +106,7 @@ const JobDetails = () => {
               />
 
               <JobTabs
-                tabs={tabs}
+                tabs={JOB_DETAILS_TABS}
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
               />
@@ -120,6 +123,7 @@ const JobDetails = () => {
           }
         />
       </>
+      dh
     </SafeAreaView>
   );
 };

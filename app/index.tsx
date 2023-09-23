@@ -8,11 +8,15 @@ import Welcome from "../components/home/welcome/Welcome";
 import Popularjobs from "../components/home/popular/Popularjobs";
 import Nearbyjobs from "../components/home/nearby/Nearbyjobs";
 import ScreenHeaderBtn from "../components/common/header/ScreenHeaderBtn";
+// @ts-ignore
 import profile from "../assets/images/kemal.jpg";
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
+  const toggleDrawer = () => {
+    navigation?.toggleDrawer();
+  };
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
       <Stack.Screen
@@ -23,7 +27,7 @@ const Home = () => {
             <ScreenHeaderBtn
               iconUrl={icons.menu}
               dimension="60%"
-              handlePress={null}
+              handlePress={toggleDrawer}
             />
           ),
           headerRight: () => (
