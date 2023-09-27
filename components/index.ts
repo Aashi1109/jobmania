@@ -11,7 +11,8 @@ import { default as JobTabs } from "./jobdetails/tabs/JobTabs";
 import { default as JobAbout } from "./jobdetails/about/About";
 import { default as JobFooter } from "./jobdetails/footer/Footer";
 import Specifics from "./jobdetails/specifics/Specifics";
-
+import UserProfileModalData from "./user/UserProfileModel";
+import CustomModal from "./common/modal/CustomModal";
 export {
   ScreenHeaderBtn,
   Welcome,
@@ -22,4 +23,6 @@ export {
   JobAbout,
   JobFooter,
   Specifics,
+  UserProfileModalData,
+  CustomModal,
 };
