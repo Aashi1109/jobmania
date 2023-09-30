@@ -1,11 +1,12 @@
 import {
-    Auth,
-    createUserWithEmailAndPassword,
-    getAuth,
-    GoogleAuthProvider,
-    onAuthStateChanged,
-    signInWithEmailAndPassword,
-    signInWithPopup,
+  Auth,
+  createUserWithEmailAndPassword,
+  getAuth,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut as signOutUser, // Renamed to avoid conflicts
 } from "firebase/auth";
 import app from "./firebaseConfig";
 
@@ -28,7 +29,8 @@ class AuthHelpers {
     try {
       await createUserWithEmailAndPassword(this.authRef, email, password);
     } catch (error: any) {
-      alert(error?.messages ?? "Something went wrong.");
+      alert(error?.message ?? "Something went wrong.");
+      throw error; // Re-throw the error for potential further handling
     }
   };
 
@@ -40,43 +42,51 @@ class AuthHelpers {
   signIn = async (email: string, password: string) => {
     try {
       await signInWithEmailAndPassword(this.authRef, email, password);
-    } catch (e) {
-      alert(e?.messages ?? "Something went wrong");
+    } catch (error) {
+      alert(error?.message ?? "Something went wrong");
+      throw error; // Re-throw the error for potential further handling
     }
   };
 
   /**
-   * Listens for change in auth state of user and returns boolean indicating it
+   * Listens for changes in the auth state of the user and returns a boolean indicating it.
+   * @returns {boolean} - `true` if the user is authenticated, `false` otherwise.
    */
   authObserver = () => {
-    onAuthStateChanged(this.authRef, (user) => {
-      return !!user;
+    // Use a Promise to handle the asynchronous nature of onAuthStateChanged
+    return new Promise<boolean>((resolve) => {
+      onAuthStateChanged(this.authRef, (user) => {
+        resolve(!!user);
+      });
     });
   };
 
   /**
-   * Sign-out the currently sign-in user
+   * Sign-out the currently signed in user
    */
-  signOut = () => {};
+  signOut = async () => {
+    try {
+      await signOutUser(this.authRef);
+    } catch (error) {
+      console.error("Sign-out error:", error);
+    }
+  };
 
   /**
-   * Handles authentication using google
+   * Handles Google authentication.
+   * @returns {Promise<User | null>} A promise that resolves with the authenticated user data, or `null` if authentication fails.
    */
-  googleAuth = () => {
+  googleAuth = async () => {
     const googleProvider = new GoogleAuthProvider();
-    signInWithPopup(this.authRef, googleProvider)
-      .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
 
-        const user = result.user;
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const message = error.message;
-
-        const email = error.customData.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-      });
+    try {
+      const result = await signInWithPopup(this.authRef, googleProvider);
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      return result.user;
+    } catch (error) {
+      console.error("Google authentication error:", error);
+      return null;
+    }
   };
 }

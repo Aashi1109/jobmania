@@ -1,52 +1,56 @@
+import { COLORS } from "@/constants";
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
     borderRadius: 20,
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.modalColor,
     width: 290,
-    padding: 20,
+    padding: 30,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     position: "relative",
   },
-  header: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-  },
+
   headerPicture: {
-    width: 80,
-    height: 80,
-    borderRadius: 50,
+    width: 132,
+    height: 132,
+    borderRadius: 10,
+    marginTop:"-35%"
   },
   headerInfo: {
-    marginLeft: 16,
-    gap: 4,
+    color: COLORS.white,
+    marginVertical:8
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: "bold",
+    color: COLORS.white,
   },
-  subInfo: {
-    marginTop: 24,
-    gap: 4,
+  lightText: {
+    color: COLORS.gray
+  },
+  description: {
+    color: COLORS.white,
+    marginBottom:14,
+    textAlign:"center"
+  },
+  footerLogos: {
+    flexDirection:"row",
+    gap:35
+  },
+  footerLogoItem: {
+    width:25,
+    height:25,
+    objectFit:"contain",
+    tintColor: COLORS.gray
   },
   horizontalRule: {
     width: "100%",
-    backgroundColor: "#e6e4e6",
+    backgroundColor: COLORS.gray,
     marginVertical: 14,
     height: 2,
-  },
-  moreInfoLink: {
-    textAlign: "center",
-  },
-  editIcon: {
-    height: 20,
-    width: 20,
-  },
-  editIconContainer: {
-    position: "absolute",
-    top: 15,
-    right: 15,
   },
 });
 

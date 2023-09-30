@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Image, Modal, StyleSheet, View, Text } from "react-native";
+import {Image, Modal, StyleSheet, View, Text, Linking} from "react-native";
 import { Link } from "expo-router";
 import styles from "./userprofilemodal.style";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import {icons} from "@/constants";
 
 interface UserProfileModalProps {
   image: any;
@@ -15,31 +15,22 @@ const UserProfileModalData = (props: UserProfileModalProps) => {
   const { bio, image, name, subInfos, iconImage } = props;
   return (
     <View style={styles.container}>
-      <View style={styles.editIconContainer}>
-        <TouchableOpacity onPress={null}>
-          <Image source={iconImage} style={styles.editIcon} />
-        </TouchableOpacity>
+      <Image source={image} style={styles.headerPicture} />
+      <View style={styles.headerInfo}>
+        <Text style={styles.headerTitle}>{name}</Text>
+        <Text style={styles.lightText}>{"Software Developer"}</Text>
       </View>
-      <View style={styles.header}>
-        <Image source={image} style={styles.headerPicture} />
-        <View style={styles.headerInfo}>
-          <Text style={styles.headerTitle}>{name}</Text>
-          <Text>{bio}</Text>
-        </View>
-      </View>
+      <Text style={styles.description}>
+          {bio}
+      </Text>
+      <Text style={styles.lightText}>Joined 13 May, 2023</Text>
 
-      {subInfos.map((subInfo, index) => (
-        <View style={styles.subInfo} key={index}>
-          <Text style={{ fontWeight: "700", fontSize: 14 }}>
-            {subInfo.infoTitle}
-          </Text>
-          <Text>{subInfo.infoText}</Text>
-        </View>
-      ))}
       <View style={styles.horizontalRule} />
-      <Link href={"/profile"} style={styles.moreInfoLink}>
-        More Info
-      </Link>
+      <View style={styles.footerLogos}>
+        <Image source={icons.linkedIcon} style={styles.footerLogoItem}/>
+        <Image source={icons.googleIcon} style={styles.footerLogoItem}/>
+        <Image source={icons.twitterIcon} style={styles.footerLogoItem}/>
+      </View>
     </View>
   );
 };

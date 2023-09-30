@@ -9,6 +9,9 @@ import location from "../assets/icons/location.png";
 import chevronLeft from "../assets/icons/chevron-left.png";
 import chevronRight from "../assets/icons/chevron-right.png";
 import editIcon from "../assets/icons/edit-icon.png";
+import linkedIcon from "../assets/icons/linkedin.png";
+import googleIcon from "../assets/icons/google.png";
+import twitterIcon from "../assets/icons/twitter.png";
 
 export default {
   heart,
@@ -22,4 +25,7 @@ export default {
   chevronLeft,
   editIcon,
   chevronRight,
+  linkedIcon,
+  twitterIcon,
+  googleIcon
 };

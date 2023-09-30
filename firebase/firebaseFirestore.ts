@@ -1,7 +1,17 @@
 // functions for CRUD operations in firestore
-import {addDoc, collection, doc, Firestore, getDoc, getFirestore, serverTimestamp,} from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  CollectionReference,
+  doc,
+  Firestore,
+  getDoc,
+  getFirestore,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
 import app from "./firebaseConfig";
-import {USER_COLLECTION_NAME} from "./constants";
+import { USER_COLLECTION_NAME } from "./constants";
 
 /**
  * Contains CRUD methods for `users` collection.
@@ -9,33 +19,62 @@ import {USER_COLLECTION_NAME} from "./constants";
 class UserFirestoreService {
   dbRef: Firestore;
   collectionName: string;
+  userCollectionRef: CollectionReference;
 
   constructor() {
     this.collectionName = USER_COLLECTION_NAME;
     this.dbRef = getFirestore(app);
+    this.userCollectionRef = collection(
+      this.dbRef,
+      this.collectionName
+    ).withConverter(userConverter);
   }
 
   /**
-   * Add document in `user` collection
-   * @param documentData - Data object to insert in the collection. By default, createdAt is inserted no need to pass it.
+   * Add a user to the `users` collection.
+   * @param documentData - An object containing the data of the user to be added. By default, the `createdAt` field is added for you, so you do not need to pass it in.
+   * @returns The ID of the newly added user document.
    */
-  addDocToCollection = async (documentData: object) => {
-    const docRef = await addDoc(collection(this.dbRef, this.collectionName), {
+  async addUserToCollection(documentData: object): Promise<string> {
+    const docRef = await addDoc(this.userCollectionRef, {
       ...documentData,
       createdAt: serverTimestamp(),
     });
     return docRef.id;
-  };
+  }
 
   /**
-   * Retrieve a document by its ID
+   * Get a user from the `users` collection by their ID.
+   * @param docId - The ID of the user document to get.
+   * @returns The user object, or `null` if the user does not exist.
    */
-  getDocumentById = async (docId: string) => {
-    const docRef = doc(this.dbRef, this.collectionName, docId);
+  async getUserById(docId: string): Promise<User | null> {
+    const docRef = doc(this.userCollectionRef, docId);
 
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
+      return docSnap.data() as User;
+    } else {
+      return null;
     }
-  };
+  }
+
+  /**
+   * Update the data of a user in the `users` collection.
+   * @param user - The user to update.
+   * @returns A promise that resolves when the update is complete.
+   */
+  async updateUser(user: User): Promise<void> {
+    const docRef = doc(this.userCollectionRef, user.id);
+
+    await updateDoc(docRef, {
+      fullName: user.fullName,
+      profileImage: user.profileImage,
+      appliedJobs: user.appliedJobs,
+      skills: user.skills,
+      location: user.location,
+      description: user.description,
+    });
+  }
 }
