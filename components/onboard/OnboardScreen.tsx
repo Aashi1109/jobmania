@@ -40,8 +40,9 @@ const OnboardScreen = () => {
 
             <BasicCard>
               <CircularAvatarImagePicker
-                imageSource={images.profile}
-                step={4}
+                size={100}
+                circleProgress={0.0005}
+                strokeWidth={10}
               />
               <AuthForm setData={null} />
             </BasicCard>

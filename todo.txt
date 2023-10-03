@@ -2,3 +2,7 @@ authentication
 Modal for profile
 Sidebar
 Favourites
+
+
+Major
+-- resume related question 
