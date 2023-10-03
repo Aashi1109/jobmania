@@ -8,7 +8,6 @@ import Welcome from "../components/home/welcome/Welcome";
 import Popularjobs from "../components/home/popular/Popularjobs";
 import Nearbyjobs from "../components/home/nearby/Nearbyjobs";
 import ScreenHeaderBtn from "../components/common/header/ScreenHeaderBtn";
-// @ts-ignore
 import { CustomModal, UserProfileModalData } from "@/components";
 
 const Home = ({ navigation }) => {

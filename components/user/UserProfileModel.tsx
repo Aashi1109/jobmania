@@ -1,35 +1,34 @@
 import React, { useState } from "react";
-import {Image, Modal, StyleSheet, View, Text, Linking} from "react-native";
-import { Link } from "expo-router";
+import { Image, View, Text } from "react-native";
 import styles from "./userprofilemodal.style";
-import {icons} from "@/constants";
+import { icons } from "@/constants";
+import VerticalDivider from "../common/VerticalDivider";
 
 interface UserProfileModalProps {
   image: any;
   name: string;
   bio: string;
   iconImage: any;
+  title: string;
   subInfos: { infoTitle: string; infoText: string }[];
 }
 const UserProfileModalData = (props: UserProfileModalProps) => {
-  const { bio, image, name, subInfos, iconImage } = props;
+  const { bio, image, name, subInfos, title } = props;
   return (
     <View style={styles.container}>
       <Image source={image} style={styles.headerPicture} />
       <View style={styles.headerInfo}>
         <Text style={styles.headerTitle}>{name}</Text>
-        <Text style={styles.lightText}>{"Software Developer"}</Text>
+        <Text style={styles.lightText}>{title}</Text>
       </View>
-      <Text style={styles.description}>
-          {bio}
-      </Text>
+      <Text style={styles.description}>{bio}</Text>
       <Text style={styles.lightText}>Joined 13 May, 2023</Text>
 
-      <View style={styles.horizontalRule} />
+      <VerticalDivider />
       <View style={styles.footerLogos}>
-        <Image source={icons.linkedIcon} style={styles.footerLogoItem}/>
-        <Image source={icons.googleIcon} style={styles.footerLogoItem}/>
-        <Image source={icons.twitterIcon} style={styles.footerLogoItem}/>
+        <Image source={icons.linkedIcon} style={styles.footerLogoItem} />
+        <Image source={icons.googleIcon} style={styles.footerLogoItem} />
+        <Image source={icons.twitterIcon} style={styles.footerLogoItem} />V
       </View>
     </View>
   );

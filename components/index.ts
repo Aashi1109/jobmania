@@ -13,16 +13,21 @@ import { default as JobFooter } from "./jobdetails/footer/Footer";
 import Specifics from "./jobdetails/specifics/Specifics";
 import UserProfileModalData from "./user/UserProfileModel";
 import CustomModal from "./common/modal/CustomModal";
+import VerticalDivider from "./common/VerticalDivider";
+import Button from "./common/Button";
+
 export {
   ScreenHeaderBtn,
   Welcome,
   Nearbyjobs,
   Popularjobs,
   Company,
+  VerticalDivider,
   JobTabs,
   JobAbout,
   JobFooter,
   Specifics,
+  Button,
   UserProfileModalData,
   CustomModal,
 };

@@ -1,7 +1,5 @@
-import React from "react";
-import { Image, View } from "react-native";
-
 import Modal from "react-native-modal";
+
 import styles from "./custommodal.styles";
 
 const CustomModal = ({

@@ -17,11 +17,11 @@ const styles = StyleSheet.create({
     width: 132,
     height: 132,
     borderRadius: 10,
-    marginTop:"-35%"
+    marginTop: "-35%",
   },
   headerInfo: {
     color: COLORS.white,
-    marginVertical:8
+    marginVertical: 8,
   },
   headerTitle: {
     fontSize: 20,
@@ -29,28 +29,22 @@ const styles = StyleSheet.create({
     color: COLORS.white,
   },
   lightText: {
-    color: COLORS.gray
+    color: COLORS.gray,
   },
   description: {
     color: COLORS.white,
-    marginBottom:14,
-    textAlign:"center"
+    marginBottom: 14,
+    textAlign: "center",
   },
   footerLogos: {
-    flexDirection:"row",
-    gap:35
+    flexDirection: "row",
+    gap: 35,
   },
   footerLogoItem: {
-    width:25,
-    height:25,
-    objectFit:"contain",
-    tintColor: COLORS.gray
-  },
-  horizontalRule: {
-    width: "100%",
-    backgroundColor: COLORS.gray,
-    marginVertical: 14,
-    height: 2,
+    width: 25,
+    height: 25,
+    objectFit: "contain",
+    tintColor: COLORS.gray,
   },
 });
 
