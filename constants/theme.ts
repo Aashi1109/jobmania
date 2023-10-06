@@ -9,6 +9,9 @@ const COLORS = {
 
   white: "#F3F4F8",
   lightWhite: "#FAFAFC",
+
+  inputBgColor: "#f5f5f5",
+  inputPlaceHolderColor: "#CACACA",
 };
 
 const FONT = {

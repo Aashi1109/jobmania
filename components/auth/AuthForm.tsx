@@ -7,10 +7,12 @@ import styles from "./authform.style";
 import VerticalDivider from "../common/VerticalDivider";
 import Button from "../common/Button";
 import { COLORS, icons } from "@/constants";
+import { AuthScreenStagesE } from "@/definitions/enums";
 
 const providerList = ["google"];
 const AuthForm = ({
   isLoginForm = true,
+  setData,
 }: {
   isLoginForm?: boolean;
   setData: Function;
@@ -23,6 +25,12 @@ const AuthForm = ({
       if (isLogin) {
       } else {
       }
+    }
+  };
+
+  const handleButtonClick = () => {
+    if (isLogin) {
+    } else {
     }
   };
   return (
@@ -66,14 +74,26 @@ const AuthForm = ({
         </TouchableOpacity>
       </View>
 
-      <Button label={isLogin ? "Login" : "Sign up"} handleClick={null} />
+      <Button
+        label={isLogin ? "Login" : "Sign up"}
+        handleClick={handleButtonClick}
+      />
 
       {/* Create/Login ask */}
       <View style={styles.authAsk}>
         <Text style={styles.authAskText}>
           {isLogin ? "Create Account ? " : "Already have an account ? "}
         </Text>
-        <TouchableOpacity onPress={() => setIsLogin((prevState) => !prevState)}>
+        <TouchableOpacity
+          onPress={() => {
+            setData({
+              stage: isLogin
+                ? AuthScreenStagesE.REGISTER
+                : AuthScreenStagesE.LOGIN,
+            });
+            setIsLogin((prevState) => !prevState);
+          }}
+        >
           <Text style={styles.authAskClickableText}>
             {isLogin ? "Sign up" : "Login"}
           </Text>

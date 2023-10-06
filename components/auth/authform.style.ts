@@ -9,8 +9,8 @@ const styles = StyleSheet.create({
     height: 45,
     width: "100%",
     borderRadius: 5,
-    backgroundColor: COLORS.lightWhite,
-    placeholderTextColor: COLORS.gray2,
+    backgroundColor: COLORS.inputBgColor,
+    placeholderTextColor: COLORS.inputPlaceHolderColor,
     paddingVertical: 13,
     paddingHorizontal: 18,
   },
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   //     marginBottom: 14,
   //   },
   forgotPassword: {
-    color: COLORS.gray2,
+    color: COLORS.gray,
     fontSize: 12,
     marginTop: -5,
     // marginBottom: 14,
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   authAskText: {
-    color: COLORS.gray2,
+    color: COLORS.gray,
   },
   authAskClickableText: {
     color: COLORS.tertiary,

@@ -12,6 +12,12 @@ import editIcon from "../assets/icons/edit-icon.png";
 import linkedIcon from "../assets/icons/linkedin.png";
 import googleIcon from "../assets/icons/google.png";
 import twitterIcon from "../assets/icons/twitter.png";
+import fileUpload from "../assets/icons/fileUpload.png";
+import setting from "../assets/icons/setting.png";
+import saved from "../assets/icons/saved.png";
+import home from "../assets/icons/home.png";
+import profileIcon from "../assets/icons/profileIcon.png";
+import moveUp from "../assets/icons/moveUp.png";
 
 export default {
   heart,
@@ -27,5 +33,11 @@ export default {
   chevronRight,
   linkedIcon,
   twitterIcon,
-  googleIcon
+  googleIcon,
+  fileUpload,
+  profileIcon,
+  setting,
+  saved,
+  home,
+  moveUp,
 };
