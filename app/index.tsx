@@ -9,19 +9,22 @@ import Popularjobs from "../components/home/popular/Popularjobs";
 import Nearbyjobs from "../components/home/nearby/Nearbyjobs";
 import ScreenHeaderBtn from "../components/common/header/ScreenHeaderBtn";
 import { CustomModal, UserProfileModalData } from "@/components";
+import { DrawerActions, useNavigation } from "@react-navigation/native";
 
-const Home = ({ navigation }) => {
+const Home = () => {
   const router = useRouter();
+  const navigation = useNavigation();
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const toggleDrawer = () => {
-    navigation?.toggleDrawer();
+    navigation.dispatch(DrawerActions.toggleDrawer());
   };
 
   const toggleModal = () => {
     setIsModalVisible((prevState) => !prevState);
   };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
       <Stack.Screen

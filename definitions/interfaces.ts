@@ -9,4 +9,10 @@ interface AuthScreenStagesI {
   stage?: AuthScreenStagesE;
 }
 
-export { AuthScreenStagesI, SkillItemI };
+interface AuthFormInputsI {
+  username?: string;
+  email: string;
+  password: string;
+}
+
+export { AuthScreenStagesI, SkillItemI, AuthFormInputsI };
