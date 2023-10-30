@@ -5,11 +5,11 @@ import styles from "./authscreen";
 import HeadText from "@/components/common/headtext/HeadText";
 import BasicCard from "@/components/common/cards/basic/BasicCard";
 import WelcomeContent from "@/components/WelcomeContent";
-import AuthForm from "./AuthForm";
 import { AuthScreenStagesE } from "@/definitions/enums";
 import { AuthScreenStagesI } from "@/definitions/interfaces";
 import StageTwo from "./registerStages/stage2/StageTwo";
 import StageThree from "./registerStages/stage3/StageThree";
+import AuthForm from "./authForm/AuthForm";
 
 const AuthScreen = () => {
   const [userStage, setUserStage] = useState<AuthScreenStagesE>(
@@ -20,6 +20,9 @@ const AuthScreen = () => {
     if (data?.stage) {
       console.log("data.stage", data.stage);
       setUserStage(data.stage);
+    }
+    if (data?.data) {
+      console.log("Data Received -> ", data.data);
     }
   };
 

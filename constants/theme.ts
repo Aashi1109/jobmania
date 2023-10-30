@@ -12,6 +12,8 @@ const COLORS = {
 
   inputBgColor: "#f5f5f5",
   inputPlaceHolderColor: "#CACACA",
+
+  error: "#FF5252",
 };
 
 const FONT = {
