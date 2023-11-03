@@ -78,3 +78,5 @@ class UserFirestoreService {
     });
   }
 }
+
+export default UserFirestoreService;

@@ -25,7 +25,7 @@ const AuthForm = ({
 
   // form
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -41,16 +41,22 @@ const AuthForm = ({
     }
   };
 
-  const handleButtonClick = () => {
+  const handleButtonClick = async () => {
+    let formData = null;
+    const result = await handleSubmit((data) => {
+      formData = data;
+    })();
     if (isLogin) {
+      setData({ data: formData });
     } else {
+      setData({ stage: AuthScreenStagesE.REGISTER_STAGE_2 });
     }
   };
   return (
     <View style={styles.container}>
       {!isLogin && (
         <CustomInput
-          register={register}
+          control={control}
           label="username"
           placeholder="jobmania"
           errors={errors}
@@ -58,13 +64,13 @@ const AuthForm = ({
       )}
       <CustomInput
         label="email"
-        register={register}
+        control={control}
         placeholder="jobmania@email.com"
         errors={errors}
       />
       <CustomInput
         label="password"
-        register={register}
+        control={control}
         placeholder="Password"
         errors={errors}
       />

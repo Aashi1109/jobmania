@@ -10,6 +10,8 @@ import { AuthScreenStagesI } from "@/definitions/interfaces";
 import StageTwo from "./registerStages/stage2/StageTwo";
 import StageThree from "./registerStages/stage3/StageThree";
 import AuthForm from "./authForm/AuthForm";
+import CircularAvatarWithProgress from "../circularprogress/CircularAvatarImagePicker";
+import StageWrapper from "./registerStages/StageWrapper";
 
 const AuthScreen = () => {
   const [userStage, setUserStage] = useState<AuthScreenStagesE>(
@@ -35,9 +37,13 @@ const AuthScreen = () => {
       case AuthScreenStagesE.FORGOT_PASSWORD:
         return null;
       case AuthScreenStagesE.REGISTER_STAGE_2:
-        return <StageTwo />;
+        return (
+          <StageWrapper handleClick={null}>
+            <StageTwo setPickedFile={null} />
+          </StageWrapper>
+        );
       case AuthScreenStagesE.REGISTER_STAGE_3:
-        return <StageThree />;
+        return <StageThree setData={handleSetData} />;
       default:
         return null;
     }
@@ -70,7 +76,16 @@ const AuthScreen = () => {
             <WelcomeContent />
           </BasicCard>
         )}
-        <BasicCard>{renderStageContent()}</BasicCard>
+        <BasicCard>
+          {userStage !== AuthScreenStagesE.LOGIN && (
+            <CircularAvatarWithProgress
+              circleProgress={0.001}
+              size={100}
+              strokeWidth={8}
+            />
+          )}
+          {renderStageContent()}
+        </BasicCard>
       </View>
     </View>
   );

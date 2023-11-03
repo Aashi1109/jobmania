@@ -1,8 +1,12 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  inputContainer: {
+  container: {
     gap: 16,
+  },
+  buttonContainer: {
+    gap: 8,
+    flexDirection: "row",
   },
 });
 

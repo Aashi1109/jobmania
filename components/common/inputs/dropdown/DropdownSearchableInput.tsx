@@ -11,6 +11,7 @@ import {
 import styles from "./dropdown.style";
 import { skillsList } from "@/constants";
 import ChipList from "../../chips/chiplist/ChipList";
+import { SkillItemI } from "@/definitions/interfaces";
 
 const DropdownContentText = ({ textLabel, handlePress }) => {
   return (
