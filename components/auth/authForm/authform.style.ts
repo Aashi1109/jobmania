@@ -5,19 +5,7 @@ const styles = StyleSheet.create({
   container: {
     gap: 14,
   },
-  input: {
-    height: 45,
-    width: "100%",
-    borderRadius: 5,
-    backgroundColor: COLORS.inputBgColor,
-    placeholderTextColor: COLORS.inputPlaceHolderColor,
-    paddingVertical: 13,
-    paddingHorizontal: 18,
-  },
-  label: {
-    fontSize: 15,
-    marginBottom: 7,
-  },
+
   //   inputGroup: {
   //     marginBottom: 14,
   //   },

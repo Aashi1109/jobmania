@@ -7,7 +7,13 @@ interface SkillItemI {
 
 interface AuthScreenStagesI {
   stage?: AuthScreenStagesE;
-  data?: object;
+  data?: AuthFormInputsI;
 }
 
-export { AuthScreenStagesI, SkillItemI };
+interface AuthFormInputsI {
+  username?: string;
+  email: string;
+  password: string;
+}
+
+export { AuthScreenStagesI, SkillItemI, AuthFormInputsI };

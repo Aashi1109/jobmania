@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { Image, Text, View } from "react-native";
-import { TextInput } from "react-native";
 import { TouchableOpacity } from "react-native";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
 
 import styles from "./authform.style";
-import VerticalDivider from "../common/VerticalDivider";
-import Button from "../common/Button";
 import { COLORS, icons } from "@/constants";
 import { AuthScreenStagesE } from "@/definitions/enums";
+import CustomInput from "@/components/common/inputs/customInput/CustomInput";
+import VerticalDivider from "@/components/common/VerticalDivider";
+import Button from "@/components/common/Button";
+import authFormSchema from "@/utils/validations/authFormSchema";
 
 const providerList = ["google"];
 const AuthForm = ({
@@ -19,6 +22,16 @@ const AuthForm = ({
 }) => {
   const [authProvider, setAuthProvider] = useState(providerList[0]);
   const [isLogin, setIsLogin] = useState(isLoginForm);
+
+  // form
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(authFormSchema),
+  });
+
   const forgotPasswordHandler = () => {};
   const continueWithHandler = () => {
     if (authProvider == providerList[0]) {
@@ -28,28 +41,39 @@ const AuthForm = ({
     }
   };
 
-  const handleButtonClick = () => {
+  const handleButtonClick = async () => {
+    let formData = null;
+    const result = await handleSubmit((data) => {
+      formData = data;
+    })();
     if (isLogin) {
+      setData({ data: formData });
     } else {
-      setData({ data: {}, stage: AuthScreenStagesE.REGISTER_STAGE_2 });
+      setData({ stage: AuthScreenStagesE.REGISTER_STAGE_2 });
     }
   };
   return (
     <View style={styles.container}>
       {!isLogin && (
-        <View>
-          <Text style={styles.label}>Username</Text>
-          <TextInput style={styles.input} placeholder="jobmania" />
-        </View>
+        <CustomInput
+          control={control}
+          label="username"
+          placeholder="jobmania"
+          errors={errors}
+        />
       )}
-      <View>
-        <Text style={styles.label}>Email</Text>
-        <TextInput style={styles.input} placeholder="jobmania@mail.com" />
-      </View>
-      <View>
-        <Text style={styles.label}>Password</Text>
-        <TextInput style={styles.input} placeholder="password" />
-      </View>
+      <CustomInput
+        label="email"
+        control={control}
+        placeholder="jobmania@email.com"
+        errors={errors}
+      />
+      <CustomInput
+        label="password"
+        control={control}
+        placeholder="Password"
+        errors={errors}
+      />
 
       {isLogin && (
         <TouchableOpacity onPress={forgotPasswordHandler}>

@@ -7,6 +7,8 @@ import React from "react";
 import { DUMMY_IMAGE_URL } from "@/constants";
 
 const CustomSidebarMenu = (props: any) => {
+  console.log("CustomSidebarMenu rendered");
+
   return (
     <SafeAreaView>
       <Image source={{ uri: DUMMY_IMAGE_URL }} />

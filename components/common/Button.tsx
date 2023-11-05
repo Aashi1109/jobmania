@@ -13,14 +13,16 @@ const Button = ({
   label,
   backgroundColor = COLORS.primary,
   handleClick,
+  isDisabled = false,
 }: {
   padding?: number;
   backgroundColor?: string;
   label: string;
+  isDisabled?: boolean;
   handleClick: (event: GestureResponderEvent) => void;
 }) => {
   return (
-    <TouchableOpacity onPress={handleClick}>
+    <TouchableOpacity onPress={handleClick} disabled={isDisabled}>
       <View style={[styles.container, { flex: 1, padding, backgroundColor }]}>
         <Text style={styles.text}>{label}</Text>
       </View>

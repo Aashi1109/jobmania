@@ -1,9 +1,10 @@
-import { Text, View, TouchableOpacity, ScrollView } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
 
 import styles from "./chiplist.style";
 import { COLORS } from "@/constants";
 import Chip from "../chip/Chip";
+import { SkillItemI } from "@/definitions/interfaces";
 
 const ChipList = ({
   chips,

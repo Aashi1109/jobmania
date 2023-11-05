@@ -1,44 +1,42 @@
-import { Text, View } from "react-native";
-import { TextInput } from "react-native";
+import CustomInput from "@/components/common/inputs/customInput/CustomInput";
+import React from "react";
+import { View } from "react-native";
+import { useForm } from "react-hook-form";
 
 import styles from "./stagethree.style";
-import Button from "@/components/common/Button";
-import { COLORS } from "@/constants";
-import { AuthScreenStagesE } from "@/definitions/enums";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { stageThreeSchema } from "@/utils/validations/formSchema";
+import StageWrapper from "../StageWrapper";
 
-const StageThree = ({ setData }: { setData: Function }) => {
+const StageThree = ({ setData }) => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(stageThreeSchema),
+  });
+
+  const handleClick = () => {
+    const validationResult = handleSubmit((data) => {});
+  };
   return (
-    <View style={styles.container}>
+    <StageWrapper handleClick={handleClick}>
       <View style={styles.inputContainer}>
-        <View>
-          <Text style={styles.label}>Portfolio Link</Text>
-          <TextInput style={styles.input} placeholder="https://..." />
-        </View>
-        <View>
-          <Text style={styles.label}>Other Link</Text>
-          <TextInput style={styles.input} placeholder="LinkedIn, Github ..." />
-        </View>
+        <CustomInput
+          label="portfolio"
+          control={control}
+          errors={errors}
+          placeholder="Enter website link"
+        />
+        <CustomInput
+          label="other"
+          control={control}
+          errors={errors}
+          placeholder="Enter link"
+        />
       </View>
-      <View style={{ flexDirection: "row", gap: 10 }}>
-        <View style={{ flex: 1 }}>
-          <Button
-            label="Skip"
-            backgroundColor={COLORS.gray}
-            handleClick={() =>
-              setData({ stage: AuthScreenStagesE.REGISTER_STAGE_3 })
-            }
-          />
-        </View>
-        <View style={{ flex: 1 }}>
-          <Button
-            label="Next"
-            handleClick={() =>
-              setData({ stage: AuthScreenStagesE.REGISTER_STAGE_3 })
-            }
-          />
-        </View>
-      </View>
-    </View>
+    </StageWrapper>
   );
 };
 
