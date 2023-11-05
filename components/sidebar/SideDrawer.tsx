@@ -1,35 +1,40 @@
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import AppliedJobs from "@/components/appliedJobs/AppliedJobs";
-import FavouriteJobs from "@/components/favouriteJobs/FavouriteJobs";
-import { NavigationContainer } from "@react-navigation/native";
-import CustomSidebarMenu from "@/components/sidebar/CustomSidebarMenu";
+import { Text, View } from "react-native";
+import { Drawer } from "../navigators";
 import Home from "@/app";
+import AppliedJobs from "@/app/(drawer)/applied";
+import Favourite from "@/app/(drawer)/favourite";
+import SavedJobs from "@/app/(drawer)/saved";
+import Setting from "@/app/(drawer)/setting";
 
 const SideDrawer = () => {
-  const Drawer = createDrawerNavigator();
-
   return (
-    <NavigationContainer>
-      <Drawer.Navigator
-        drawerContent={(props) => <CustomSidebarMenu {...props} />}
-      >
-        <Drawer.Screen
-          name={"Home"}
-          component={Home}
-          options={{ drawerLabel: "Home" }}
-        />
-        <Drawer.Screen
-          name={"AppliedJobs"}
-          component={AppliedJobs}
-          options={{ drawerLabel: "Applied Jobs" }}
-        />
-        <Drawer.Screen
-          name={"FavouriteJobs"}
-          component={FavouriteJobs}
-          options={{ drawerLabel: "Applied Jobs" }}
-        />
-      </Drawer.Navigator>
-    </NavigationContainer>
+    <Drawer.Navigator>
+      <Drawer.Screen
+        name={"index"}
+        options={{ drawerLabel: "Home" }}
+        component={Home}
+      />
+      <Drawer.Screen
+        name={"jobs/applied"}
+        options={{ drawerLabel: "Applied Jobs" }}
+        component={AppliedJobs}
+      />
+      <Drawer.Screen
+        name={"jobs/favourite"}
+        options={{ drawerLabel: "Favourite Jobs" }}
+        component={Favourite}
+      />
+      <Drawer.Screen
+        name={"jobs/saved"}
+        options={{ drawerLabel: "Saved Jobs" }}
+        component={SavedJobs}
+      />
+      <Drawer.Screen
+        name={"setting"}
+        options={{ drawerLabel: "Setting" }}
+        component={Setting}
+      />
+    </Drawer.Navigator>
   );
 };
 

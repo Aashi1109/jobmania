@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Image } from "react-native";
 import styles from "./circularavatarprogress.style";
 import { COLORS, images } from "@/constants";
 

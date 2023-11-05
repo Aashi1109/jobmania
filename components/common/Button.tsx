@@ -1,7 +1,12 @@
+import {
+  GestureResponderEvent,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from "react-native";
+
 import { COLORS } from "@/constants";
-import React from "react";
-import { GestureResponderEvent, StyleSheet, Text, View } from "react-native";
-import { TouchableOpacity } from "react-native";
 
 const Button = ({
   padding = 8,
@@ -9,7 +14,6 @@ const Button = ({
   backgroundColor = COLORS.primary,
   handleClick,
 }: {
-  width?: string | number;
   padding?: number;
   backgroundColor?: string;
   label: string;

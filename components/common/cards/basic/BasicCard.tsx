@@ -1,18 +1,18 @@
-import { View } from "react-native";
+import { StyleSheet, View, ViewStyle } from "react-native";
 import styles from "./basiccard.style";
 import React from "react";
 
 const BasicCard = ({
   children,
-  paddingVertical,
+  height,
+  paddingVertical = 30,
 }: {
   children: React.ReactNode;
+  height?: string | number;
   paddingVertical?: number;
 }) => {
   return (
-    <View
-      style={[styles.container, { paddingVertical: paddingVertical ?? 30 }]}
-    >
+    <View style={[styles.container, { paddingVertical, height }]}>
       {children}
     </View>
   );

@@ -7,6 +7,7 @@ interface SkillItemI {
 
 interface AuthScreenStagesI {
   stage?: AuthScreenStagesE;
+  data?: object;
 }
 
 export { AuthScreenStagesI, SkillItemI };

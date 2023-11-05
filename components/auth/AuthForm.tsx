@@ -31,6 +31,7 @@ const AuthForm = ({
   const handleButtonClick = () => {
     if (isLogin) {
     } else {
+      setData({ data: {}, stage: AuthScreenStagesE.REGISTER_STAGE_2 });
     }
   };
   return (
