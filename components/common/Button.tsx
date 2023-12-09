@@ -4,6 +4,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 
 import { COLORS } from "@/constants";
@@ -13,18 +14,24 @@ const Button = ({
   label,
   backgroundColor = COLORS.primary,
   handleClick,
+  isLoading,
   isDisabled = false,
 }: {
   padding?: number;
   backgroundColor?: string;
   label: string;
   isDisabled?: boolean;
+  isLoading: boolean;
   handleClick: (event: GestureResponderEvent) => void;
 }) => {
   return (
     <TouchableOpacity onPress={handleClick} disabled={isDisabled}>
       <View style={[styles.container, { flex: 1, padding, backgroundColor }]}>
-        <Text style={styles.text}>{label}</Text>
+        {isLoading ? (
+          <ActivityIndicator size={"small"} color={COLORS.lightWhite} />
+        ) : (
+          <Text style={styles.text}>{label}</Text>
+        )}
       </View>
     </TouchableOpacity>
   );

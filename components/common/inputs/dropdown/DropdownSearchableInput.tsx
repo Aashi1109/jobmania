@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FlatList,
   ScrollView,
@@ -20,7 +20,7 @@ const DropdownContentText = ({ textLabel, handlePress }) => {
     </TouchableOpacity>
   );
 };
-const DropdownSearchableInput = () => {
+const DropdownSearchableInput = ({ setData }: { setData: Function }) => {
   const [dropdownTop, setDropdownTop] = useState(180);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState(skillsList);
@@ -88,6 +88,12 @@ const DropdownSearchableInput = () => {
       </ScrollView>
     );
   };
+
+  useEffect(() => {
+    // This effect will run whenever selectedItems changes
+    setData({ data: { skills: selectedItems } });
+  }, [selectedItems]);
+
   return (
     <View style={styles.container}>
       <View>

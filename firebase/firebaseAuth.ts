@@ -29,7 +29,7 @@ class AuthHelpers {
     try {
       await createUserWithEmailAndPassword(this.authRef, email, password);
     } catch (error: any) {
-      alert(error?.message ?? "Something went wrong.");
+      // alert(error?.message ?? "Something went wrong.");
       throw error; // Re-throw the error for potential further handling
     }
   };
@@ -43,7 +43,7 @@ class AuthHelpers {
     try {
       await signInWithEmailAndPassword(this.authRef, email, password);
     } catch (error) {
-      alert(error?.message ?? "Something went wrong");
+      // alert(error?.message ?? "Something went wrong");
       throw error; // Re-throw the error for potential further handling
     }
   };
@@ -69,6 +69,7 @@ class AuthHelpers {
       await signOutUser(this.authRef);
     } catch (error) {
       console.error("Sign-out error:", error);
+      throw error;
     }
   };
 
@@ -86,7 +87,35 @@ class AuthHelpers {
       return result.user;
     } catch (error) {
       console.error("Google authentication error:", error);
-      return null;
+      throw error;
+    }
+  };
+
+  /**
+   * Checks if a user with the given email already exists in Firebase.
+   * @param email - Email to check for existence.
+   * @returns {Promise<boolean>} - A promise that resolves with a boolean indicating whether the email already exists.
+   */
+  checkIfEmailExists = async (email: string): Promise<boolean> => {
+    let userCredential;
+    try {
+      // Attempt to create a new user
+      userCredential = await createUserWithEmailAndPassword(
+        this.authRef,
+        email,
+        "dummyPassword"
+      );
+    } catch (error) {
+      // If the error is due to an existing email, return true
+      if (error.code === "auth/email-already-in-use") {
+        return true;
+      }
+
+      // Otherwise, re-throw the error for potential further handling
+      throw error;
+    } finally {
+      // Always delete the temporary user, whether successful or not
+      await userCredential?.user?.delete();
     }
   };
 }

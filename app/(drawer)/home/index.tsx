@@ -1,5 +1,5 @@
-import { Stack, useNavigation, useRouter } from "expo-router";
-import { useState } from "react";
+import { Redirect, Stack, useNavigation, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import { SafeAreaView, View } from "react-native";
 import { ScrollView } from "react-native";
 
@@ -13,6 +13,7 @@ import {
 } from "@/components";
 import { COLORS, SIZES, icons, images } from "@/constants";
 import { DrawerActions } from "@react-navigation/native";
+import AuthHelpers from "@/firebase/firebaseAuth";
 
 const Home = () => {
   const router = useRouter();

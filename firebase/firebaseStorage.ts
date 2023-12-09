@@ -33,7 +33,7 @@ class FirebaseStorageService {
    * @throws {Error} Throws an error if the upload fails.
    * @returns {Promise<string>} A promise that resolves to the download URL of the uploaded file.
    */
-  async uploadFile(file: File | Uint8Array, fileName: string) {
+  async uploadFile(file: File | Uint8Array | Blob, fileName: string) {
     try {
       const fileRef = ref(this.storageRef, fileName);
       const uploadTask = await uploadBytes(fileRef, file);

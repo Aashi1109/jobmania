@@ -16,4 +16,16 @@ interface AuthFormInputsI {
   password: string;
 }
 
-export { AuthScreenStagesI, SkillItemI, AuthFormInputsI };
+interface IPopup {
+  showPopup: boolean;
+  count: number;
+  prevPopupTime?: number;
+  popups: {
+    message: string;
+    type: "success" | "error" | "info";
+    popupHead: string;
+    id?: number;
+  }[];
+}
+
+export { AuthScreenStagesI, SkillItemI, AuthFormInputsI, IPopup };

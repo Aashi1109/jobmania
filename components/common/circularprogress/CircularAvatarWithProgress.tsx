@@ -6,11 +6,13 @@ import { COLORS, images } from "@/constants";
 const CircularAvatarWithProgress = ({
   strokeWidth,
   size,
+  selectedImage,
   circleProgress,
 }: {
   size: number;
   strokeWidth: number;
   circleProgress: number;
+  selectedImage?: string;
 }) => {
   const Radius = size / 2 - Math.round(strokeWidth / 2);
   const circleLength = Radius * 2 * Math.PI;
@@ -41,7 +43,10 @@ const CircularAvatarWithProgress = ({
         </svg>
       </View>
       <View style={[styles.avatar, { width: size * 0.7, height: 0.7 * size }]}>
-        <Image source={images.profile} style={styles.image} />
+        <Image
+          source={selectedImage ? selectedImage : images.profile}
+          style={styles.image}
+        />
       </View>
     </View>
   );

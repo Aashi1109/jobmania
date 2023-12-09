@@ -1,7 +1,12 @@
 import AuthScreen from "@/components/auth/AuthScreen";
+import PopupProvider from "@/context/PopupContext";
 
 const index = () => {
-  return <AuthScreen />;
+  return (
+    <PopupProvider>
+      <AuthScreen />
+    </PopupProvider>
+  );
 };
 
 export default index;

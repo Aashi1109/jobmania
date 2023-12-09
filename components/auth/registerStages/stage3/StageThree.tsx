@@ -1,40 +1,23 @@
-import CustomInput from "@/components/common/inputs/customInput/CustomInput";
-import React from "react";
 import { View } from "react-native";
-import { useForm } from "react-hook-form";
+import React from "react";
 
+import DropdownSearchableInput from "@/components/common/inputs/dropdown/DropdownSearchableInput";
+import FileUpload from "@/components/common/inputs/fileupload/FileUpload";
 import styles from "./stagethree.style";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { stageThreeSchema } from "@/utils/validations/formSchema";
 import StageWrapper from "../StageWrapper";
+import { AuthScreenStagesE } from "@/definitions/enums";
 
-const StageThree = ({ setData }) => {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(stageThreeSchema),
-  });
-
-  const handleClick = () => {
-    const validationResult = handleSubmit((data) => {});
-  };
+const StageThree = ({ setData }: { setData: Function }) => {
+  const handleBtnClick = () =>
+    setData({ stage: AuthScreenStagesE.REGISTER_STAGE_4 });
   return (
-    <StageWrapper handleClick={handleClick}>
+    <StageWrapper
+      handleNextClick={handleBtnClick}
+      handleSkipClick={handleBtnClick}
+    >
       <View style={styles.inputContainer}>
-        <CustomInput
-          label="portfolio"
-          control={control}
-          errors={errors}
-          placeholder="Enter website link"
-        />
-        <CustomInput
-          label="other"
-          control={control}
-          errors={errors}
-          placeholder="Enter link"
-        />
+        <DropdownSearchableInput setData={setData} />
+        <FileUpload setPickedFile={setData} />
       </View>
     </StageWrapper>
   );

@@ -8,16 +8,22 @@ interface CustomInputProps {
   control: Control<FieldValues>;
   errors: FieldErrors<FieldValues>;
   placeholder: string;
+  labelText?: string;
+  hideText?: boolean;
 }
 const CustomInput = ({
   label,
+  labelText,
   control,
+  hideText,
   placeholder,
   errors,
 }: CustomInputProps) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
+      <Text style={styles.label}>
+        {labelText ? labelText : label.toLowerCase()}
+      </Text>
       <Controller
         control={control}
         name={label}
@@ -28,7 +34,7 @@ const CustomInput = ({
             onChangeText={onChange}
             onBlur={onBlur}
             value={value}
-            defaultValue=""
+            secureTextEntry={hideText ? hideText : false}
           />
         )}
       />

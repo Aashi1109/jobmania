@@ -1,16 +1,69 @@
+import { AuthScreenStagesE } from "@/definitions/enums";
+import {
+  stageFourSchema,
+  stageTwoSchema,
+} from "@/utils/validations/formSchema";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
 import { View } from "react-native";
-import React from "react";
-
-import DropdownSearchableInput from "@/components/common/inputs/dropdown/DropdownSearchableInput";
-import FileUpload from "@/components/common/inputs/fileupload/FileUpload";
+import StageWrapper from "../StageWrapper";
 import styles from "./stagetwo.style";
+import CustomInput from "@/components/common/inputs/customInput/CustomInput";
 
-const StageTwo = ({ setPickedFile }: { setPickedFile: Function }) => {
+const StageTwo = ({ setData }: { setData: Function }) => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(stageTwoSchema),
+    defaultValues: {
+      fullName: "",
+      about: "",
+      profileHeading: "",
+      location: "",
+    },
+  });
+
+  const onSubmit = (data) => {
+    console.log("Form data submitted:", data);
+    setData({ stage: AuthScreenStagesE.REGISTER_STAGE_3, data });
+  };
+
   return (
-    <View style={styles.inputContainer}>
-      <DropdownSearchableInput />
-      <FileUpload setPickedFile={setPickedFile} />
-    </View>
+    <StageWrapper
+      handleNextClick={handleSubmit(onSubmit)}
+      handleSkipClick={null}
+    >
+      <View style={styles.inputContainer}>
+        <CustomInput
+          label="fullName"
+          labelText="Full Name"
+          control={control}
+          errors={errors}
+          placeholder="Jane Doe"
+        />
+        <CustomInput
+          label="profileHeading"
+          labelText="Profile Heading"
+          control={control}
+          errors={errors}
+          placeholder="SDE"
+        />
+        <CustomInput
+          label="about"
+          control={control}
+          errors={errors}
+          placeholder="Short description about yourself"
+        />
+        <CustomInput
+          label="location"
+          control={control}
+          errors={errors}
+          placeholder="Current location"
+        />
+      </View>
+    </StageWrapper>
   );
 };
 

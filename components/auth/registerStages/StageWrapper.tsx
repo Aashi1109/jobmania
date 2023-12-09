@@ -6,10 +6,12 @@ import { COLORS } from "@/constants";
 
 const StageWrapper = ({
   children,
-  handleClick,
+  handleNextClick,
+  handleSkipClick,
 }: {
   children: React.ReactNode;
-  handleClick: any;
+  handleNextClick: Function;
+  handleSkipClick: Function;
 }) => {
   return (
     <View style={styles.container}>
@@ -17,13 +19,18 @@ const StageWrapper = ({
       <View style={styles.buttonContainer}>
         <View style={{ flex: 1 }}>
           <Button
+            isLoading={false}
             label="Skip"
-            handleClick={handleClick}
+            handleClick={handleSkipClick}
             backgroundColor={COLORS.inputPlaceHolderColor}
           />
         </View>
         <View style={{ flex: 1 }}>
-          <Button label="Next" handleClick={handleClick} />
+          <Button
+            label="Next"
+            handleClick={handleNextClick}
+            isLoading={false}
+          />
         </View>
       </View>
     </View>

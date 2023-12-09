@@ -10,6 +10,8 @@ import {
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
+
+import User, { userConverter } from "../models/User";
 import app from "./firebaseConfig";
 import { USER_COLLECTION_NAME } from "./constants";
 
@@ -35,7 +37,7 @@ class UserFirestoreService {
    * @param documentData - An object containing the data of the user to be added. By default, the `createdAt` field is added for you, so you do not need to pass it in.
    * @returns The ID of the newly added user document.
    */
-  async addUserToCollection(documentData: object): Promise<string> {
+  async addUserToCollection(documentData: User): Promise<string> {
     const docRef = await addDoc(this.userCollectionRef, {
       ...documentData,
       createdAt: serverTimestamp(),
@@ -68,7 +70,7 @@ class UserFirestoreService {
   async updateUser(user: User): Promise<void> {
     const docRef = doc(this.userCollectionRef, user.id);
 
-    await updateDoc(docRef, {
+    return await updateDoc(docRef, {
       fullName: user.fullName,
       profileImage: user.profileImage,
       appliedJobs: user.appliedJobs,

@@ -13,7 +13,7 @@ const FileUpload = ({ setPickedFile }: { setPickedFile: Function }) => {
       type: ["application/pdf", "application/msword"],
     });
     if (file && !file.canceled) {
-      setPickedFile(file.assets[0]);
+      setPickedFile({ data: { resume: file.assets[0] } });
       setSelectedFile(file.assets[0].name);
     }
   };
