@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.tertiary,
   },
   bgText: {
-    marginTop: 88,
+    marginTop: 84,
     fontSize: 81,
     fontWeight: "bold",
     color: "rgba(255,255,255,0.1)",
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   content: {
     marginTop: 253,
     gap: 12,
-    paddingHorizontal: 22,
+    marginHorizontal: "auto",
   },
 });
 

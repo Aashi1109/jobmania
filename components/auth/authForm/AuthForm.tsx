@@ -44,7 +44,7 @@ const AuthForm = ({
     defaultValues: {
       email: "",
       password: "",
-      username: isLogin ? "@invalid@" : "",
+      username: "",
     },
   });
 
@@ -81,6 +81,10 @@ const AuthForm = ({
     }
   };
   const onError = (error) => console.log(error);
+
+  useEffect(() => {
+    setValue("username", isLogin ? "@invalid@" : "");
+  }, [isLogin]);
 
   return (
     <View style={styles.container}>

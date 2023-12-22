@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Alert, Text, Pressable, View } from "react-native";
+import { Text, View, Dimensions } from "react-native";
 
-import styles from "./authscreen";
+import styles from "./authscreen.style";
 import HeadText from "@/components/common/headtext/HeadText";
 import BasicCard from "@/components/common/cards/basic/BasicCard";
 import WelcomeContent from "@/components/WelcomeContent";
@@ -17,11 +17,11 @@ import StageFour from "./registerStages/stage4/StageFour";
 import StageThree from "./registerStages/stage3/StageThree";
 import UserFirestoreService from "@/firebase/firebaseFirestore";
 import User from "@/models/User";
-import CustomModal from "../common/modal/CustomModal";
 import Popup from "../popup/Popup";
-import { usePopup } from "@/context/PopupContext";
 import { router } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
+import { usePopup } from "@/context/PopupContext";
+import { FirebaseError } from "firebase/app";
 
 let inputData = {};
 const AuthScreen = () => {
@@ -29,10 +29,11 @@ const AuthScreen = () => {
     AuthScreenStagesE.INTIAL
   );
   const [avatarProgress, setAvatarProgress] = useState(AvatarProgressE.Nothing);
-  // const [inputData, setInputData] = useState({});
+  const { dispatch } = usePopup();
 
   const [isLoading, setIsLoading] = useState(false);
-  const { dispatch: popupDispatch } = usePopup();
+
+  const [fontSize, setFontSize] = useState(81);
   const { signIn, signUp } = useAuth();
 
   const doStyleChange =
@@ -173,9 +174,18 @@ const AuthScreen = () => {
             }
           }
         }
-      } catch (error) {
+      } catch (error: FirebaseError | any) {
         setIsLoading(false);
 
+        dispatch({
+          type: "CREATE_POPUP",
+          payload: {
+            message:
+              (error.message?.includes("invalid-login-credentials") &&
+                "Invalid credentials provided") ||
+              "Something went wrong",
+          },
+        });
         // Reset previous states on errors
         if (userStage === AuthScreenStagesE.LOGIN) {
           setUserStage(AuthScreenStagesE.INTIAL);
@@ -193,6 +203,15 @@ const AuthScreen = () => {
 
     handleProcessing();
   }, [userStage]);
+
+  // Set your initial font size here
+
+  useEffect(() => {
+    // Dynamically adjust font size based on screen width
+    const screenWidth = Dimensions.get("window").width;
+    const calculatedFontSize = screenWidth * 0.216; // Adjust the multiplier as needed
+    setFontSize(calculatedFontSize);
+  }, []);
 
   const handleFileUpload = async (
     uri: string,
@@ -244,7 +263,7 @@ const AuthScreen = () => {
       {/* Background */}
       <View style={styles.bgContainer}>
         <View style={styles.bgTop}>
-          <Text style={styles.bgText}>JobMania</Text>
+          <Text style={[styles.bgText, { fontSize }]}>JobMania</Text>
         </View>
         <View style={styles.bgBottom} />
         <View
@@ -254,7 +273,7 @@ const AuthScreen = () => {
               : styles.bgHeadContainerShifted
           }
         >
-          <HeadText fontSize={doStyleChange ? 82 : 35} />
+          <HeadText fontSize={doStyleChange ? 82 : 45} />
         </View>
       </View>
 
