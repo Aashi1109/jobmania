@@ -7,8 +7,8 @@ import {
   View,
 } from "react-native";
 import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
-import { COLORS, icons, JOB_DETAILS_TABS, SIZES } from "../../constants";
-import useFetch from "../../hooks/useFetch";
+import { COLORS, icons, JOB_DETAILS_TABS, SIZES } from "../../../constants";
+import useFetch from "../../../hooks/useFetch";
 import {
   Company,
   JobAbout,
@@ -16,7 +16,7 @@ import {
   JobTabs,
   ScreenHeaderBtn,
   Specifics,
-} from "../../components";
+} from "../../../components";
 import { useCallback, useState } from "react";
 
 const JobDetails = () => {
@@ -24,9 +24,10 @@ const JobDetails = () => {
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState(JOB_DETAILS_TABS[0]);
+  const jobId = params.id;
 
   const { isLoading, error, data, refetch } = useFetch("job-details", {
-    job_id: params.id,
+    job_id: jobId,
   });
 
   const onRefresh = useCallback(() => {
@@ -117,6 +118,7 @@ const JobDetails = () => {
         </ScrollView>
 
         <JobFooter
+          jobId={jobId}
           url={
             data[0]?.job_google_link ??
             "https://careers.google.com/jobs/results/"

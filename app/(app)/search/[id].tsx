@@ -5,16 +5,16 @@ import {
   Image,
   SafeAreaView,
   Text,
-  TouchableOpacity,
+  Pressable,
   View,
 } from "react-native";
 import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 import axios from "axios";
 
-import { ScreenHeaderBtn } from "../../components";
-import { COLORS, icons, SIZES } from "../../constants";
-import styles from "../../styles/search";
-import NearbyJobCard from "../../components/common/cards/nearby/NearbyJobCard";
+import { ScreenHeaderBtn } from "../../../components";
+import { COLORS, icons, SIZES } from "../../../constants";
+import styles from "../../../styles/search";
+import NearbyJobCard from "../../../components/common/cards/nearby/NearbyJobCard";
 
 const JobSearch = () => {
   const params = useGlobalSearchParams();
@@ -112,7 +112,7 @@ const JobSearch = () => {
         )}
         ListFooterComponent={() => (
           <View style={styles.footerContainer}>
-            <TouchableOpacity
+            <Pressable
               style={styles.paginationButton}
               onPress={() => handlePagination("left")}
             >
@@ -121,11 +121,11 @@ const JobSearch = () => {
                 style={styles.paginationImage}
                 resizeMode="contain"
               />
-            </TouchableOpacity>
+            </Pressable>
             <View style={styles.paginationTextBox}>
               <Text style={styles.paginationText}>{page}</Text>
             </View>
-            <TouchableOpacity
+            <Pressable
               style={styles.paginationButton}
               onPress={() => handlePagination("right")}
             >
@@ -134,7 +134,7 @@ const JobSearch = () => {
                 style={styles.paginationImage}
                 resizeMode="contain"
               />
-            </TouchableOpacity>
+            </Pressable>
           </View>
         )}
       />

@@ -15,7 +15,7 @@ const CustomInput = ({
   label,
   labelText,
   control,
-  hideText,
+  hideText = false,
   placeholder,
   errors,
 }: CustomInputProps) => {
@@ -34,7 +34,7 @@ const CustomInput = ({
             onChangeText={onChange}
             onBlur={onBlur}
             value={value}
-            secureTextEntry={hideText ? hideText : false}
+            secureTextEntry={hideText}
           />
         )}
       />

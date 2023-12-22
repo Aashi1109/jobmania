@@ -7,11 +7,18 @@ import styles from "./stagethree.style";
 import StageWrapper from "../StageWrapper";
 import { AuthScreenStagesE } from "@/definitions/enums";
 
-const StageThree = ({ setData }: { setData: Function }) => {
+const StageThree = ({
+  setData,
+  isLoading,
+}: {
+  setData: Function;
+  isLoading: boolean;
+}) => {
   const handleBtnClick = () =>
     setData({ stage: AuthScreenStagesE.REGISTER_STAGE_4 });
   return (
     <StageWrapper
+      isLoading={isLoading}
       handleNextClick={handleBtnClick}
       handleSkipClick={handleBtnClick}
     >

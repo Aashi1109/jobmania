@@ -1,11 +1,17 @@
 import { images } from "@/constants";
 import { Image, StyleSheet, Text, View } from "react-native";
 
-const WelcomeContent = () => {
+const WelcomeContent = ({
+  showDescriptionText = true,
+}: {
+  showDescriptionText?: boolean;
+}) => {
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>Welcome Seeker </Text>
+        <Text style={styles.title}>
+          Welcome {showDescriptionText ? "Seeker" : ""}{" "}
+        </Text>
         <View style={{ width: 36, height: 30 }}>
           <Image
             source={images.hands}
@@ -18,7 +24,9 @@ const WelcomeContent = () => {
           />
         </View>
       </View>
-      <Text>JobMania is trending platform for finding job easily.</Text>
+      {showDescriptionText && (
+        <Text>JobMania is trending platform for finding job easily.</Text>
+      )}
     </View>
   );
 };
@@ -32,6 +40,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
+    fontWeight: "500",
   },
 });
 export default WelcomeContent;

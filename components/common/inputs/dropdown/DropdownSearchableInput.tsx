@@ -4,7 +4,7 @@ import {
   ScrollView,
   Text,
   TextInput,
-  TouchableOpacity,
+  Pressable,
   View,
 } from "react-native";
 
@@ -15,9 +15,9 @@ import { SkillItemI } from "@/definitions/interfaces";
 
 const DropdownContentText = ({ textLabel, handlePress }) => {
   return (
-    <TouchableOpacity onPress={handlePress}>
+    <Pressable onPress={handlePress}>
       <Text style={{ padding: 5 }}>{textLabel}</Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 const DropdownSearchableInput = ({ setData }: { setData: Function }) => {

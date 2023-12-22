@@ -1,4 +1,4 @@
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, Pressable, View } from "react-native";
 import { useState } from "react";
 
 import styles from "./chiplist.style";
@@ -21,14 +21,14 @@ const ChipList = ({
           <Chip key={chip.id} chipData={chip} handleClick={handleChipClick} />
         ))}
         {chips.length > 3 && (
-          <TouchableOpacity
+          <Pressable
             style={{ alignSelf: "center" }}
             onPress={() => setShowAll(!showAll)}
           >
             <Text style={{ color: COLORS.primary }}>
               {showAll ? "Close" : `+${chips.length - 3} more`}
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         )}
       </View>
     </ScrollView>

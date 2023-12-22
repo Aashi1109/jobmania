@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Alert, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Text, Pressable, View } from "react-native";
 
 import styles from "./authscreen";
 import HeadText from "@/components/common/headtext/HeadText";
@@ -20,13 +20,11 @@ import User from "@/models/User";
 import CustomModal from "../common/modal/CustomModal";
 import Popup from "../popup/Popup";
 import { usePopup } from "@/context/PopupContext";
+import { router } from "expo-router";
+import { useAuth } from "@/context/AuthContext";
 
 let inputData = {};
 const AuthScreen = () => {
-  const authHelpers = new AuthHelpers();
-  const profileStorageService = new FirebaseStorageService("/profilePics");
-  const resumeStorageService = new FirebaseStorageService("/resume");
-  const userDBHelpers = new UserFirestoreService();
   const [userStage, setUserStage] = useState<AuthScreenStagesE>(
     AuthScreenStagesE.INTIAL
   );
@@ -35,29 +33,34 @@ const AuthScreen = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const { dispatch: popupDispatch } = usePopup();
+  const { signIn, signUp } = useAuth();
 
-  const handleSetData = async (data: AuthScreenStagesI) => {
+  const doStyleChange =
+    userStage === AuthScreenStagesE.INTIAL ||
+    userStage === AuthScreenStagesE.LOGIN;
+
+  const handleSetData = ({ data, stage }: AuthScreenStagesI) => {
     console.log("dfdhfbdfdbsj");
-    if (data?.data) {
-      if (data.data && data.data["profilePic"]) {
-        setAvatarProgress(AvatarProgressE.ImagePresent);
+    if (data) {
+      if (data && data["profilePic"]) {
+        setAvatarProgress(
+          (prevState) => prevState + AvatarProgressE.ImagePresent
+        );
       }
-      inputData = { ...inputData, ...data?.data };
+      // setInputData((prevData) => ({ ...inputData, ...data }));
+      inputData = { ...inputData, ...data };
     }
-    if (data?.stage) {
-      const newStage = data.stage;
-
-      // if (newStage === AuthScreenStagesE.REGISTER_STAGE_2) {
-      //   setAvatarProgress(prevState => prevState + AvatarProgressE.Stage2);
-      // }
+    if (stage) {
+      const newStage = stage;
+      console.log("avatar progress -> ", avatarProgress);
       if (newStage === AuthScreenStagesE.REGISTER_STAGE_3) {
-        setAvatarProgress((prevState) => prevState + AvatarProgressE.Stage3);
+        setAvatarProgress(AvatarProgressE.Stage3);
       }
       if (newStage === AuthScreenStagesE.REGISTER_STAGE_4) {
-        setAvatarProgress((prevState) => prevState + AvatarProgressE.Stage4);
+        setAvatarProgress(AvatarProgressE.Stage4);
       }
       if (newStage === AuthScreenStagesE.REGISTER_COMPLETE) {
-        setAvatarProgress((prevState) => prevState + AvatarProgressE.Complete);
+        setAvatarProgress(AvatarProgressE.Complete);
       }
       setUserStage(newStage);
     }
@@ -66,43 +69,33 @@ const AuthScreen = () => {
   console.log("inputData -> ", inputData);
   console.log("====================================");
 
-  const handleUserLogin = async (userData: {
-    email: string;
-    password: string;
-  }) => {
-    const loginResp = await authHelpers.signUp(
-      userData["email"],
-      userData["password"]
-    );
-    console.log("login done");
-
-    return loginResp;
-  };
-
   useEffect(() => {
     const handleProcessing = async () => {
+      const authHelpers = new AuthHelpers();
+      const userData = {
+        email: inputData["email"],
+        password: inputData["password"],
+      };
       try {
         if (userStage === AuthScreenStagesE.LOGIN) {
-          const userData = {
-            email: inputData["email"],
-            password: inputData["password"],
-          };
-
-          const loginResp = await handleUserLogin(userData);
-          const isAuthenticated = await authHelpers.authObserver();
-
-          if (isAuthenticated) {
-            // TODO push to home page
+          setIsLoading(true);
+          await signIn(userData.email, userData.password);
+          if (await authHelpers.authObserver()) {
+            setIsLoading(false);
+            router.replace("/(app)/home");
           }
         }
         if (userStage === AuthScreenStagesE.CHECK_EMAIL_EXISTS) {
+          setIsLoading(true);
           const isUserExists = await authHelpers.checkIfEmailExists(
             inputData["email"] ?? ""
           );
+          setIsLoading(false);
 
           if (isUserExists) {
             // TODO show error popup to user
             alert("Email already exists");
+            setUserStage(AuthScreenStagesE.REGISTER);
           } else {
             setUserStage(AuthScreenStagesE.REGISTER_STAGE_2);
             setAvatarProgress(
@@ -111,22 +104,31 @@ const AuthScreen = () => {
           }
         }
         if (userStage === AuthScreenStagesE.REGISTER_COMPLETE) {
-          const registerResp = await handleRegister(inputData);
-          const isAuthenticated = await authHelpers.authObserver();
+          setIsLoading(true);
+          await signUp(userData.email, userData.password);
 
-          if (isAuthenticated) {
+          const userId = await authHelpers.authObserver();
+          console.log("isAuthenticated -> ", userId);
+
+          if (userId) {
             const profilePic = inputData["profilePic"];
             const resumeData = inputData["resume"];
             let profileDownloadUrl = "";
             let resumeDownloadUrl = "";
             let resumeFileName = "";
             if (profilePic) {
+              const profileStorageService = new FirebaseStorageService(
+                "/profilePics"
+              );
               profileDownloadUrl = await handleFileUpload(
                 profilePic.uri,
                 profileStorageService
               );
             }
             if (resumeData) {
+              const resumeStorageService = new FirebaseStorageService(
+                "/resume"
+              );
               resumeFileName = resumeData["name"];
               resumeDownloadUrl = await handleFileUpload(
                 resumeData.uri,
@@ -135,52 +137,57 @@ const AuthScreen = () => {
               );
             }
 
-            const newUser = new User(
-              inputData["fullName"] || "",
-              inputData["username"] || "",
-              { profileUrl: profileDownloadUrl },
-              inputData["email"] || "",
-              { lat: null, long: null, address: inputData["location"] },
-              inputData["description"] || "",
-              inputData["skills"] || [],
-              [],
-              { fileName: resumeFileName, resumeUrl: resumeDownloadUrl },
-              inputData["heading"]
-            );
+            const newUser = new User({
+              fullName: inputData["fullName"]?.trim() || "",
+              userName: inputData["username"]?.trim() || "",
+              profileImage: { profileUrl: profileDownloadUrl },
+              email: inputData["email"]?.trim() || "",
+              location: {
+                lat: null,
+                long: null,
+                address: inputData["location"]?.trim() || "",
+              },
+              description: inputData["description"]?.trim() || "",
+              skills: inputData["skills"] || [],
 
-            // const finalUserData = {
-            //   email: inputData["email"] || "",
-            //   fullName: inputData["fullName"] || "",
-            //   userName: inputData["username"] || "",
-            //   profileImage: { profileUrl: profileDownloadUrl },
-            //   location: { lat: null, lang: null, address: inputData["location"] },
-            //   resume: { fileName: resumeFileName, resumeUrl: resumeDownloadUrl },
-            //   description: inputData["description"] || "",
-            //   skills: inputData["skills"] || [],
-            //   appliedJobs: [],
-            // };
-            const userCreateResp =
-              await userDBHelpers.addUserToCollection(newUser);
+              resume: {
+                fileName: resumeFileName,
+                resumeUrl: resumeDownloadUrl,
+              },
+              heading: inputData["profileHeading"]?.trim() || "",
+
+              links: {
+                linkedIn: inputData["linkedIn"],
+                portfolio: inputData["porfolio"],
+              },
+            });
+            const userDBHelpers = new UserFirestoreService();
+            const userCreateResp = await userDBHelpers.addUserToCollection(
+              newUser,
+              userId
+            );
             if (userCreateResp) {
               // Route user to homepage and save its authentication state
-              console.log(userCreateResp);
+              setIsLoading(false);
+              router.replace("/(app)/home");
             }
           }
         }
       } catch (error) {
+        setIsLoading(false);
+
+        // Reset previous states on errors
+        if (userStage === AuthScreenStagesE.LOGIN) {
+          setUserStage(AuthScreenStagesE.INTIAL);
+        }
+        if (userStage === AuthScreenStagesE.CHECK_EMAIL_EXISTS) {
+          setUserStage(AuthScreenStagesE.REGISTER);
+        }
+        if (userStage === AuthScreenStagesE.REGISTER_COMPLETE) {
+          setUserStage(AuthScreenStagesE.REGISTER_STAGE_4);
+        }
+
         console.error("Auth error -> ", error);
-        // <CustomModal modalVisible={true} toggleModal={() => {}}>
-        //   <View>
-        //     <Text>
-        //       {error?.message?.split("/")[1]?.split("-").join(" ") || "error"}
-        //     </Text>
-        //   </View>
-        // </CustomModal>;
-        // Alert.alert(
-        //   "Auth Error",
-        //   error?.message?.split("/")[1]?.split("-").join(" ") ||
-        //     "Something went wrong while doing authentication"
-        // );
       }
     };
 
@@ -203,13 +210,6 @@ const AuthScreen = () => {
 
     return downloadUrl;
   };
-  const handleRegister = async (userData: object) => {
-    const registerResp = await authHelpers.signUp(
-      userData["email"],
-      userData["password"]
-    );
-    return registerResp;
-  };
 
   const renderStageContent = () => {
     switch (userStage) {
@@ -228,12 +228,12 @@ const AuthScreen = () => {
       case AuthScreenStagesE.FORGOT_PASSWORD:
         return null;
       case AuthScreenStagesE.REGISTER_STAGE_2:
-        return <StageTwo setData={handleSetData} />;
+        return <StageTwo setData={handleSetData} isLoading={isLoading} />;
       case AuthScreenStagesE.REGISTER_STAGE_3:
-        return <StageThree setData={handleSetData} />;
+        return <StageThree setData={handleSetData} isLoading={isLoading} />;
       case AuthScreenStagesE.REGISTER_STAGE_4:
       case AuthScreenStagesE.REGISTER_COMPLETE:
-        return <StageFour setData={handleSetData} />;
+        return <StageFour setData={handleSetData} isLoading={isLoading} />;
       default:
         return null;
     }
@@ -249,20 +249,18 @@ const AuthScreen = () => {
         <View style={styles.bgBottom} />
         <View
           style={
-            userStage === AuthScreenStagesE.LOGIN
+            doStyleChange
               ? styles.bgHeadContainer
               : styles.bgHeadContainerShifted
           }
         >
-          <HeadText
-            fontSize={userStage === AuthScreenStagesE.LOGIN ? 82 : 35}
-          />
+          <HeadText fontSize={doStyleChange ? 82 : 35} />
         </View>
       </View>
 
       {/* Content */}
       <View style={styles.content}>
-        {userStage === AuthScreenStagesE.LOGIN && (
+        {doStyleChange && (
           <BasicCard>
             <WelcomeContent />
           </BasicCard>
@@ -275,24 +273,6 @@ const AuthScreen = () => {
             />
           )}
           {renderStageContent()}
-
-          {/* <TouchableOpacity
-            onPress={() => {
-              const statuses = ["success", "error", "info"];
-              const randomStatus =
-                statuses[Math.floor(Math.random() * statuses.length)];
-              dispatch({
-                type: "CREATE_POPUP",
-                payload: {
-                  message: "Just checking popup",
-                  popupHead: "Demo",
-                  type: randomStatus,
-                },
-              });
-            }}
-          >
-            <Text>Generate Popup</Text>
-          </TouchableOpacity> */}
         </BasicCard>
       </View>
     </View>

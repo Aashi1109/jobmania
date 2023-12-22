@@ -1,5 +1,5 @@
-import { Image, Text, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
+import { Image, Text, Pressable, View } from "react-native";
+import { useState } from "react";
 import * as DocumentPicker from "expo-document-picker";
 
 import { icons } from "@/constants";
@@ -26,14 +26,14 @@ const FileUpload = ({ setPickedFile }: { setPickedFile: Function }) => {
     <View style={styles.container}>
       <Text style={styles.label}>Upload Resume</Text>
       {!selectedFile ? (
-        <TouchableOpacity onPress={handleFilePick}>
+        <Pressable onPress={handleFilePick}>
           <View style={styles.fileUploadContainer}>
             <View style={styles.fileUploadImageContainer}>
               <Image source={icons.fileUpload} style={styles.fileUploadImage} />
             </View>
             <Text style={styles.fileUploadText}>Select a document</Text>
           </View>
-        </TouchableOpacity>
+        </Pressable>
       ) : (
         <Chip
           chipData={{ id: 0, title: selectedFile }}

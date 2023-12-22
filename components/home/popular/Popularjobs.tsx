@@ -3,7 +3,7 @@ import {
   ActivityIndicator,
   FlatList,
   Text,
-  TouchableOpacity,
+  Pressable,
   View,
 } from "react-native";
 
@@ -30,9 +30,9 @@ const Popularjobs = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Popular Jobs</Text>
-        <TouchableOpacity onPress={() => router.push(`/search/Popular Jobs`)}>
+        <Pressable onPress={() => router.push(`/search/Popular Jobs`)}>
           <Text style={styles.headerBtn}>Show all</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
       <View style={styles.cardsContainer}>
         {isLoading ? (

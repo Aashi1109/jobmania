@@ -1,15 +1,15 @@
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, Pressable, View } from "react-native";
 
 import styles from "./popularjobcard.style";
 import { checkReturnImageUrl } from "../../../../utils";
 
 const PopularJobCard = ({ item, selectedJob, handleCardPress }) => {
   return (
-    <TouchableOpacity
+    <Pressable
       style={styles.container(selectedJob, item)}
       onPress={() => handleCardPress(item)}
     >
-      <TouchableOpacity style={styles.logoContainer(selectedJob, item)}>
+      <Pressable style={styles.logoContainer(selectedJob, item)}>
         <Image
           source={{
             uri: checkReturnImageUrl(item?.employer_logo),
@@ -17,7 +17,7 @@ const PopularJobCard = ({ item, selectedJob, handleCardPress }) => {
           resizeMode="contain"
           style={styles.logoImage}
         />
-      </TouchableOpacity>
+      </Pressable>
       <Text style={styles.companyName} numberOfLines={1}>
         {item.employer_name ?? "N/A"}
       </Text>
@@ -33,7 +33,7 @@ const PopularJobCard = ({ item, selectedJob, handleCardPress }) => {
           <Text style={styles.location}> {item.job_country ?? "N/A"}</Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

@@ -1,8 +1,10 @@
 import { usePopup } from "@/context/PopupContext";
-import React, { useRef, useState, useEffect } from "react";
-import { View, Text, Image, TouchableOpacity, Animated } from "react-native";
-import styles from "./popup.styles";
+import { useRef, useEffect } from "react";
+import { View, Text, Animated } from "react-native";
+
 import { CheckboxIcon, InfoIcon, WarningIcon } from "../common/iconcomponents";
+import { SIZES } from "@/constants";
+import styles from "./popup.styles";
 
 const calImgSrc = (type: string, svgProperty: object): any => {
   if (type === "success") return <CheckboxIcon {...svgProperty} />;
@@ -11,57 +13,74 @@ const calImgSrc = (type: string, svgProperty: object): any => {
   return null; // Adjust based on your actual image import in React Native
 };
 
+const OPACITY_ANIM_DURATION = 500;
+const TRANSLATE_Y_ANIM_DURATION = 500;
+const POPUP_TOTAL_SHOWN_TIME = 5000;
+
 const Popup = () => {
-  // const [mounted, setMounted] = useState(false);
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const translateXAnim = useRef(new Animated.Value(0));
-  const translateYAnim = useRef(new Animated.Value(-100));
+  const translateYAnim = useRef(new Animated.Value(-100)).current;
+  const opacityAnim = useRef(new Animated.Value(0)).current;
 
   const popupState = usePopup();
-
   const {
-    state: { showPopup, popups, count },
+    state: { showPopup, popups },
   } = popupState;
 
   useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 1000, // Adjust the duration as needed
-      useNativeDriver: true,
-    }).start();
-  }, [fadeAnim, showPopup]);
+    if (showPopup) {
+      // Initial fade in and slide up animation
+      Animated.parallel([
+        Animated.timing(opacityAnim, {
+          toValue: 1,
+          duration: OPACITY_ANIM_DURATION,
+          useNativeDriver: true,
+        }),
+        Animated.timing(translateYAnim, {
+          toValue: 0,
+          duration: TRANSLATE_Y_ANIM_DURATION,
+          useNativeDriver: true,
+        }),
+      ]).start();
+
+      // After 5 seconds, fade out and slide up animation
+      const timeout = setTimeout(() => {
+        Animated.parallel([
+          Animated.timing(opacityAnim, {
+            toValue: 0,
+            duration: OPACITY_ANIM_DURATION,
+            useNativeDriver: true,
+          }),
+          Animated.timing(translateYAnim, {
+            toValue: -100,
+            duration: TRANSLATE_Y_ANIM_DURATION,
+            useNativeDriver: true,
+          }),
+        ]).start();
+      }, POPUP_TOTAL_SHOWN_TIME);
+
+      // Clear the timeout when the component unmounts or when showPopup changes
+      return () => clearTimeout(timeout);
+    }
+  }, [opacityAnim, popups, translateYAnim]);
+  console.log("popups -> ", popups);
+  console.log("showPopup -> ", showPopup);
 
   return (
-    <View>
+    <View style={styles.container}>
       {showPopup &&
         popups
           .filter((filPop) => Date.now() - filPop.id! <= 5000)
           .map((popup, index) => (
             <Animated.View
               key={index}
-              style={[
-                styles.popup,
-
-                { display: Date.now() - popup.id! > 5000 ? "none" : "flex" },
-                { opacity: fadeAnim },
-              ]}
+              style={{
+                transform: [{ translateY: translateYAnim }],
+                opacity: opacityAnim,
+              }}
             >
-              <View style={[styles.popupStrip, styles[popup.type]]}></View>
-              <View style={styles.popupIcon}>
-                {/* <Image source={calImgSrc(popup.type)} alt="popup icon" /> */}
-                {calImgSrc(popup.type, { height: 48, width: 48 })}
+              <View style={styles.popup}>
+                <Text style={styles.popupText}>{popup.message}</Text>
               </View>
-              <View style={styles.popupContent}>
-                <Text style={styles.popupHead}>{popup.popupHead}</Text>
-                <Text style={styles.popupMessage}>{popup.message}</Text>
-              </View>
-              <TouchableOpacity
-                onPress={() => {
-                  /* Add your cancel logic here */
-                }}
-              >
-                <Text style={styles.popupCancel}>&times;</Text>
-              </TouchableOpacity>
             </Animated.View>
           ))}
     </View>

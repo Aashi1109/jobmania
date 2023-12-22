@@ -1,6 +1,6 @@
 import * as ImagePicker from "expo-image-picker";
 
-import { TouchableOpacity, View } from "react-native";
+import { Pressable, View } from "react-native";
 import CircularAvatarWithProgress from "../../circularprogress/CircularAvatarWithProgress";
 import { useState } from "react";
 
@@ -29,14 +29,14 @@ const ImageInputWithProgress = ({
   };
 
   return (
-    <TouchableOpacity onPress={pickImageAsync}>
+    <Pressable onPress={pickImageAsync}>
       <CircularAvatarWithProgress
         circleProgress={stepProgress}
         size={100}
         strokeWidth={stepProgress === 0 ? 0 : 10}
         selectedImage={pickedFile}
       />
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

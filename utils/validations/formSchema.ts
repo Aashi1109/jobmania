@@ -2,7 +2,7 @@ import * as Yup from "yup";
 
 export const stageFourSchema = Yup.object().shape({
   portfolio: Yup.string().url("Invalid URL. Please enter a valid URL."),
-  other: Yup.string().url("Invalid URL. Please enter a valid URL."),
+  linkedIn: Yup.string().url("Invalid URL. Please enter a valid URL."),
 });
 
 export const stageTwoSchema = Yup.object().shape({

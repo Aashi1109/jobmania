@@ -8,6 +8,7 @@ import {
   getDoc,
   getFirestore,
   serverTimestamp,
+  setDoc,
   updateDoc,
 } from "firebase/firestore";
 
@@ -35,13 +36,28 @@ class UserFirestoreService {
   /**
    * Add a user to the `users` collection.
    * @param documentData - An object containing the data of the user to be added. By default, the `createdAt` field is added for you, so you do not need to pass it in.
+   * @param customId - (Optional) A custom ID for the user document. If not provided, Firestore will generate a random ID.
    * @returns The ID of the newly added user document.
    */
-  async addUserToCollection(documentData: User): Promise<string> {
-    const docRef = await addDoc(this.userCollectionRef, {
-      ...documentData,
-      createdAt: serverTimestamp(),
-    });
+  async addUserToCollection(
+    documentData: User,
+    customId?: string
+  ): Promise<string> {
+    let docRef;
+
+    if (customId) {
+      // If customId is provided, use it to create a reference
+      docRef = doc(this.userCollectionRef, customId);
+    } else {
+      // If customId is not provided, use addDoc to let Firestore generate a random ID
+      docRef = await addDoc(this.userCollectionRef, {
+        ...documentData,
+        createdAt: serverTimestamp(),
+      });
+    }
+
+    await setDoc(docRef, documentData); // Set the data on the reference
+
     return docRef.id;
   }
 
@@ -67,17 +83,11 @@ class UserFirestoreService {
    * @param user - The user to update.
    * @returns A promise that resolves when the update is complete.
    */
-  async updateUser(user: User): Promise<void> {
-    const docRef = doc(this.userCollectionRef, user.id);
+  async updateUser(userId, userUpdateData: object): Promise<void> {
+    const docRef = doc(this.userCollectionRef, userId);
 
-    return await updateDoc(docRef, {
-      fullName: user.fullName,
-      profileImage: user.profileImage,
-      appliedJobs: user.appliedJobs,
-      skills: user.skills,
-      location: user.location,
-      description: user.description,
-    });
+    const updateDone = await updateDoc(docRef, userUpdateData);
+    return updateDone;
   }
 }
 

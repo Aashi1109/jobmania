@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Image, Text, View } from "react-native";
-import { TouchableOpacity } from "react-native";
+import { useEffect, useState } from "react";
+import { Image, Pressable, Text, View } from "react-native";
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 
@@ -25,17 +25,26 @@ const AuthForm = ({
   const [authProvider, setAuthProvider] = useState(providerList[0]);
   const [isLogin, setIsLogin] = useState(isLoginForm);
 
+  // const defaultValues = {
+  //   email: "",
+  //   password: "",
+  // };
+  // if (!isLogin) {
+  //   defaultValues['username'] = ""
+  // }
+
   // form
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(authFormSchema),
     defaultValues: {
-      username: "",
       email: "",
       password: "",
+      username: isLogin ? "@invalid@" : "",
     },
   });
 
@@ -49,14 +58,30 @@ const AuthForm = ({
   };
 
   const handleButtonClick = async () => {
-    const result = await handleSubmit((data) => {
-      if (isLogin) {
-        setData({ data: data, stage: AuthScreenStagesE.LOGIN });
-      } else {
-        setData({ stage: AuthScreenStagesE.CHECK_EMAIL_EXISTS, data });
-      }
-    })();
+    try {
+      const data = await handleSubmit((formData) => {
+        console.log("formdata -> ", formData);
+        return formData;
+      })();
+      console.log(data);
+    } catch (error) {
+      console.error("Form submission error:", error);
+      // Handle the error, such as showing an error message
+    }
   };
+  const onSubmit = (data) => {
+    console.log(data);
+    if (isLogin) {
+      setData({ stage: AuthScreenStagesE.LOGIN, data });
+    } else {
+      setData({
+        stage: AuthScreenStagesE.CHECK_EMAIL_EXISTS,
+        data,
+      });
+    }
+  };
+  const onError = (error) => console.log(error);
+
   return (
     <View style={styles.container}>
       {!isLogin && (
@@ -82,9 +107,9 @@ const AuthForm = ({
       />
 
       {isLogin && (
-        <TouchableOpacity onPress={forgotPasswordHandler}>
+        <Pressable onPress={forgotPasswordHandler}>
           <Text style={styles.forgotPassword}>Forgot Password ?</Text>
-        </TouchableOpacity>
+        </Pressable>
       )}
 
       {/* Continue with section */}
@@ -94,7 +119,7 @@ const AuthForm = ({
           <Text>or continue with</Text>
           <VerticalDivider backgroundColor={COLORS.gray2} />
         </View>
-        <TouchableOpacity onPress={continueWithHandler}>
+        <Pressable onPress={continueWithHandler}>
           <View style={{ width: 30, height: 30, marginHorizontal: "auto" }}>
             <Image
               style={{ width: "100%", height: "100%" }}
@@ -102,14 +127,14 @@ const AuthForm = ({
               resizeMode="contain"
             />
           </View>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       <Button
         label={isLogin ? "Login" : "Sign up"}
         isDisabled={isLoading}
         isLoading={isLoading}
-        handleClick={handleButtonClick}
+        handleClick={handleSubmit(onSubmit, onError)}
       />
 
       {/* Create/Login ask */}
@@ -117,7 +142,7 @@ const AuthForm = ({
         <Text style={styles.authAskText}>
           {isLogin ? "Create Account ? " : "Already have an account ? "}
         </Text>
-        <TouchableOpacity
+        <Pressable
           onPress={() => {
             setData({
               stage: isLogin
@@ -130,7 +155,7 @@ const AuthForm = ({
           <Text style={styles.authAskClickableText}>
             {isLogin ? "Sign up" : "Login"}
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );

@@ -1,35 +1,91 @@
-import React, { useState } from "react";
-import { Image, View, Text } from "react-native";
+import {
+  Image,
+  View,
+  Text,
+  ActivityIndicator,
+  Pressable,
+  Linking,
+} from "react-native";
 import styles from "./userprofilemodal.style";
-import { icons } from "@/constants";
+import { icons, images } from "@/constants";
 import VerticalDivider from "../common/VerticalDivider";
+import User from "@/models/User";
+import { formatDate } from "@/utils/helpers/generalHelpers";
 
-interface UserProfileModalProps {
-  image: any;
-  name: string;
-  bio: string;
-  iconImage: any;
-  title: string;
-  subInfos: { infoTitle: string; infoText: string }[];
-}
-const UserProfileModalData = (props: UserProfileModalProps) => {
-  const { bio, image, name, subInfos, title } = props;
+const UserProfileModalData = ({ userData }: { userData: User | null }) => {
   return (
     <View style={styles.container}>
-      <Image source={image} style={styles.headerPicture} />
-      <View style={styles.headerInfo}>
-        <Text style={styles.headerTitle}>{name}</Text>
-        <Text style={styles.lightText}>{title}</Text>
-      </View>
-      <Text style={styles.description}>{bio}</Text>
-      <Text style={styles.lightText}>Joined 13 May, 2023</Text>
+      {userData ? (
+        <>
+          <Image
+            source={{ uri: userData.profileImage.profileUrl }}
+            style={styles.headerPicture}
+          />
+          <View style={styles.headerInfo}>
+            <Text style={styles.headerTitle}>{userData.fullName}</Text>
+            <Text style={styles.lightText}>{userData.heading}</Text>
+          </View>
+          {userData.description && (
+            <Text style={styles.description}>{userData.description}</Text>
+          )}
+          {userData.createdAt && (
+            <Text style={styles.lightText}>
+              {"Joined on " + formatDate(userData.createdAt?.toDate())}
+            </Text>
+          )}
 
-      <VerticalDivider />
-      <View style={styles.footerLogos}>
-        <Image source={icons.linkedIcon} style={styles.footerLogoItem} />
-        <Image source={icons.googleIcon} style={styles.footerLogoItem} />
-        <Image source={icons.twitterIcon} style={styles.footerLogoItem} />V
-      </View>
+          <VerticalDivider width={"100%"} />
+          <View style={styles.footerLogos}>
+            {userData.links &&
+              Object.entries(userData.links).map(([key, value]) => {
+                let children;
+                if (key === "linkedIn") {
+                  children = (
+                    <Image
+                      source={icons.linkedIcon}
+                      style={styles.footerLogoItem}
+                    />
+                  );
+                } else if (key === "portfolio") {
+                  children = (
+                    <Image
+                      source={icons.googleIcon}
+                      style={styles.footerLogoItem}
+                    />
+                  );
+                } else if (key === "twitter") {
+                  children = (
+                    <Image
+                      source={icons.twitterIcon}
+                      style={styles.footerLogoItem}
+                    />
+                  );
+                }
+
+                return (
+                  <Pressable
+                    key={key}
+                    onPress={() => {
+                      Linking.openURL(value);
+                    }}
+                  >
+                    {children}
+                  </Pressable>
+                );
+              })}
+            <Pressable
+              onPress={() => {
+                const mailtoUrl = `mailto:${userData.email}`;
+                Linking.openURL(mailtoUrl);
+              }}
+            >
+              <Image source={icons.chevronLeft} style={styles.footerLogoItem} />
+            </Pressable>
+          </View>
+        </>
+      ) : (
+        <ActivityIndicator />
+      )}
     </View>
   );
 };

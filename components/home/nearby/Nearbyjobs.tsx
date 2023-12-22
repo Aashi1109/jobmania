@@ -1,5 +1,5 @@
 import React from "react";
-import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Text, Pressable, View } from "react-native";
 
 import styles from "./nearbyjobs.style";
 import useFetch from "../../../hooks/useFetch";
@@ -18,9 +18,9 @@ const Nearbyjobs = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Nearby Jobs</Text>
-        <TouchableOpacity onPress={() => router.push(`/search/Nearby Jobs`)}>
+        <Pressable onPress={() => router.push(`/search/Nearby Jobs`)}>
           <Text style={styles.headerBtn}>Show all</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
       <View style={styles.cardsContainer}>
         {isLoading ? (

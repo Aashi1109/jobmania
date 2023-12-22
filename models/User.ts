@@ -1,3 +1,4 @@
+import { UserModelI } from "@/definitions/interfaces";
 import { serverTimestamp, FieldValue } from "firebase/firestore";
 
 class User {
@@ -15,34 +16,28 @@ class User {
     appliedDate: FieldValue;
     status: "In Process" | "Applied" | "Rejected";
   }>;
+  createdAt: FieldValue;
+  savedJobs: Array<{ jobId: string; savedAt: Date }>;
+  links: Object;
 
-  constructor(
-    fullName: string,
-    userName: string,
-    profileImage: { profileUrl: string },
-    email: string,
-    location: { lat: number; long: number; address: string },
-    description: string,
-    skills: Array<string>,
-    appliedJobs: Array<{
-      appliedDate: FieldValue;
-      status: "In Process" | "Applied" | "Rejected";
-    }>,
-    resume: { fileName: string; resumeUrl: string },
-    heading: string,
-    id?: string
-  ) {
-    this.id = id;
-    this.userName = userName;
-    this.fullName = fullName;
-    this.profileImage = { ...profileImage, createdAt: serverTimestamp() };
-    this.location = location;
-    this.description = description;
-    this.skills = skills;
-    this.appliedJobs = appliedJobs;
-    this.email = email;
-    this.resume = { ...resume, createdAt: serverTimestamp() };
-    this.heading = heading;
+  constructor(userData: UserModelI) {
+    this.id = userData.id;
+    this.userName = userData.userName;
+    this.fullName = userData.fullName;
+    this.profileImage = {
+      ...userData.profileImage,
+      createdAt: serverTimestamp(),
+    };
+    this.location = userData.location;
+    this.description = userData.description;
+    this.skills = userData.skills;
+    this.appliedJobs = userData.appliedJobs;
+    this.email = userData.email;
+    this.resume = { ...userData.resume, createdAt: serverTimestamp() };
+    this.heading = userData.heading;
+    this.createdAt = userData.createdAt ?? serverTimestamp();
+    this.links = userData.links;
+    this.savedJobs = userData.savedJobs;
   }
 }
 
@@ -59,23 +54,29 @@ export const userConverter = {
       description: user.description,
       resume: user.resume,
       heading: user.heading,
+      createdAt: user.createdAt,
+      links: user.links,
+      savedJobs: user.savedJobs,
     };
   },
   fromFirestore: (snapshot: any, options: any): User => {
     const data = snapshot.data(options);
-    return new User(
-      data.fullName,
-      data.userName,
-      data.profileImage,
-      data.email,
-      data.location,
-      data.description,
-      data.skills,
-      data.appliedJobs,
-      data.resume,
-      data.heading,
-      data.id
-    );
+    return new User({
+      fullName: data.fullName,
+      userName: data.userName,
+      profileImage: data.profileImage,
+      email: data.email,
+      location: data.location,
+      description: data.description,
+      skills: data.skills,
+      resume: data.resume,
+      heading: data.heading,
+      links: data.links,
+      appliedJobs: data.appliedJobs,
+      savedJobs: data.savedJobs,
+      createdAt: data.createdAt,
+      id: snapshot.id,
+    });
   },
 };
 

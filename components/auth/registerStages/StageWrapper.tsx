@@ -3,15 +3,19 @@ import styles from "./stagewrapper.style";
 import { View } from "react-native";
 import Button from "@/components/common/Button";
 import { COLORS } from "@/constants";
+import { GestureResponderEvent } from "react-native";
 
 const StageWrapper = ({
   children,
   handleNextClick,
   handleSkipClick,
+  isLoading,
 }: {
   children: React.ReactNode;
-  handleNextClick: Function;
-  handleSkipClick: Function;
+  handleNextClick: (event: GestureResponderEvent) => void;
+  handleSkipClick: (event: GestureResponderEvent) => void;
+
+  isLoading: boolean;
 }) => {
   return (
     <View style={styles.container}>
@@ -19,7 +23,7 @@ const StageWrapper = ({
       <View style={styles.buttonContainer}>
         <View style={{ flex: 1 }}>
           <Button
-            isLoading={false}
+            isLoading={isLoading}
             label="Skip"
             handleClick={handleSkipClick}
             backgroundColor={COLORS.inputPlaceHolderColor}
@@ -29,7 +33,7 @@ const StageWrapper = ({
           <Button
             label="Next"
             handleClick={handleNextClick}
-            isLoading={false}
+            isLoading={isLoading}
           />
         </View>
       </View>

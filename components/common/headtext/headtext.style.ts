@@ -1,4 +1,3 @@
-import { COLORS } from "@/constants";
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
@@ -9,7 +8,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontWeight: "bold",
-    color: COLORS.white,
   },
 });
 

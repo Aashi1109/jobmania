@@ -1,23 +1,32 @@
-import AuthHelpers from "@/firebase/firebaseAuth";
-import { Redirect, router, useRouter } from "expo-router";
-import { useEffect } from "react";
+import AuthScreen from "@/components/auth/AuthScreen";
+import { COLORS } from "@/constants";
+import { useAuth } from "@/context/AuthContext";
+import { usePopup } from "@/context/PopupContext";
+import { Redirect } from "expo-router";
+import { ActivityIndicator, Text, View } from "react-native";
 
-const Home = () => {
-  useEffect(() => {
-    const checkUserAuth = async () => {
-      const authHelpers = new AuthHelpers();
+const auth = () => {
+  const { dispatch } = usePopup();
+  const { user, loading } = useAuth();
+  if (loading) {
+    return (
+      <View
+        style={{
+          height: "100%",
+          width: "100%",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <ActivityIndicator size={"large"} color={COLORS.primary} />
+      </View>
+    );
+  }
 
-      const isAuthenticated = await authHelpers.authObserver();
-
-      console.log("isAuthenticated -> ", isAuthenticated);
-      if (!isAuthenticated) {
-        // return <Redirect href={"/(auth)/auth"} />;
-        router.replace("/(auth)/auth");
-      }
-    };
-    checkUserAuth();
-  }, []);
-  return <Redirect href={"/(drawer)/home"} />;
+  if (user) {
+    return <Redirect href={"/(app)/(drawer)/home"} />;
+  }
+  return <AuthScreen />;
 };
 
-export default Home;
+export default auth;

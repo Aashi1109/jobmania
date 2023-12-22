@@ -9,7 +9,13 @@ import { stageFourSchema } from "@/utils/validations/formSchema";
 import StageWrapper from "../StageWrapper";
 import { AuthScreenStagesE } from "@/definitions/enums";
 
-const StageFour = ({ setData }) => {
+const StageFour = ({
+  setData,
+  isLoading,
+}: {
+  isLoading: boolean;
+  setData: Function;
+}) => {
   const {
     control,
     handleSubmit,
@@ -25,7 +31,11 @@ const StageFour = ({ setData }) => {
     setData({ stage: AuthScreenStagesE.REGISTER_COMPLETE });
   };
   return (
-    <StageWrapper handleNextClick={handleClick} handleSkipClick={handleClick}>
+    <StageWrapper
+      handleNextClick={handleClick}
+      handleSkipClick={handleClick}
+      isLoading={isLoading}
+    >
       <View style={styles.inputContainer}>
         <CustomInput
           label="portfolio"
@@ -34,10 +44,11 @@ const StageFour = ({ setData }) => {
           placeholder="Enter website link"
         />
         <CustomInput
-          label="other"
+          label="linkedIn"
           control={control}
+          labelText="LinkedIn Link"
           errors={errors}
-          placeholder="Enter link"
+          placeholder="Enter linkedin profile link"
         />
       </View>
     </StageWrapper>

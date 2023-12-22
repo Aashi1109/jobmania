@@ -6,7 +6,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: COLORS.modalColor,
     width: 290,
-    padding: 30,
+    paddingHorizontal: 15,
+    paddingVertical: 20,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -30,6 +31,7 @@ const styles = StyleSheet.create({
   },
   lightText: {
     color: COLORS.gray,
+    textAlign: "center",
   },
   description: {
     color: COLORS.white,

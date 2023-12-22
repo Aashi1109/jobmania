@@ -10,10 +10,17 @@ import StageWrapper from "../StageWrapper";
 import styles from "./stagetwo.style";
 import CustomInput from "@/components/common/inputs/customInput/CustomInput";
 
-const StageTwo = ({ setData }: { setData: Function }) => {
+const StageTwo = ({
+  setData,
+  isLoading,
+}: {
+  setData: Function;
+  isLoading: boolean;
+}) => {
   const {
     control,
     handleSubmit,
+
     formState: { errors },
   } = useForm({
     resolver: yupResolver(stageTwoSchema),
@@ -32,6 +39,7 @@ const StageTwo = ({ setData }: { setData: Function }) => {
 
   return (
     <StageWrapper
+      isLoading={isLoading}
       handleNextClick={handleSubmit(onSubmit)}
       handleSkipClick={null}
     >

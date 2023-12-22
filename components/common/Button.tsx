@@ -3,7 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
+  Pressable,
   ActivityIndicator,
 } from "react-native";
 
@@ -25,7 +25,7 @@ const Button = ({
   handleClick: (event: GestureResponderEvent) => void;
 }) => {
   return (
-    <TouchableOpacity onPress={handleClick} disabled={isDisabled}>
+    <Pressable onPress={handleClick} disabled={isDisabled}>
       <View style={[styles.container, { flex: 1, padding, backgroundColor }]}>
         {isLoading ? (
           <ActivityIndicator size={"small"} color={COLORS.lightWhite} />
@@ -33,7 +33,7 @@ const Button = ({
           <Text style={styles.text}>{label}</Text>
         )}
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

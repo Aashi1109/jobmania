@@ -1,25 +1,32 @@
+import { SIZES } from "@/constants";
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    top: 16,
-    right: 16,
-    alignItems: "stretch",
-    flexDirection: "column",
+    top: "5%",
+    left: "50%",
+    zIndex: 1000,
+    transform: "translateX(-50%)",
+    maxHeight: 500,
+    width: "100%",
+    overflow: "hidden",
+    justifyContent: "center",
   },
   popup: {
-    padding: 8,
-    minWidth: 240,
-    borderRadius: 5,
-    justifyContent: "flex-start",
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.5,
-    shadowRadius: 2,
-    backgroundColor: "white",
-    marginBottom: 16,
-    flexDirection: "row",
+    backgroundColor: "rgba(0,0,0,.7)",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    shadowColor: "rgba(0,0,0,.5)",
+    shadowRadius: 5,
+    maxWidth: 300,
+    marginBottom: SIZES.medium,
+    marginHorizontal: "auto",
+  },
+  popupText: {
+    fontSize: 16,
+    color: "white",
   },
   popupStrip: {
     width: 5,

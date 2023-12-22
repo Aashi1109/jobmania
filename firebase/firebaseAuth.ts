@@ -24,39 +24,58 @@ class AuthHelpers {
    * Creates new user auth in firebase
    * @param email - Email of new user
    * @param password - Password of new user
+   * @returns {string} - User ID
    */
   signUp = async (email: string, password: string) => {
     try {
-      await createUserWithEmailAndPassword(this.authRef, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        this.authRef,
+        email,
+        password
+      );
+      const userId = userCredential.user.uid;
+      return userId;
     } catch (error: any) {
-      // alert(error?.message ?? "Something went wrong.");
-      throw error; // Re-throw the error for potential further handling
+      console.error("Error signing up:", error.message);
+      throw error;
     }
   };
 
   /**
-   * Signin a user in firebase
+   * Sign in a user in firebase
    * @param email - Email of existing user
    * @param password - Password of existing user
+   * @returns {string} - User ID
    */
   signIn = async (email: string, password: string) => {
     try {
-      await signInWithEmailAndPassword(this.authRef, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        this.authRef,
+        email,
+        password
+      );
+      const userId = userCredential.user.uid;
+      return userId;
     } catch (error) {
-      // alert(error?.message ?? "Something went wrong");
-      throw error; // Re-throw the error for potential further handling
+      console.error("Error signing in:", error.message);
+      throw error;
     }
   };
 
   /**
    * Listens for changes in the auth state of the user and returns a boolean indicating it.
-   * @returns {boolean} - `true` if the user is authenticated, `false` otherwise.
+   * If the user is authenticated, returns the user ID.
+   * If the user is not authenticated, returns null.
+   * @returns {string | null} - User ID or null if not authenticated
    */
   authObserver = () => {
-    // Use a Promise to handle the asynchronous nature of onAuthStateChanged
-    return new Promise<boolean>((resolve) => {
+    return new Promise<string | null>((resolve) => {
       onAuthStateChanged(this.authRef, (user) => {
-        resolve(!!user);
+        if (user) {
+          resolve(user.uid);
+        } else {
+          resolve(null);
+        }
       });
     });
   };

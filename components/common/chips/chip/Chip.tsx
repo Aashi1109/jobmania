@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, Pressable, View } from "react-native";
 
 import styles from "./chip.style";
 
@@ -12,9 +12,9 @@ const Chip = ({
   return (
     <View style={styles.container}>
       <Text style={styles.text}>{chipData.title}</Text>
-      <TouchableOpacity onPress={() => handleClick(chipData)}>
+      <Pressable onPress={() => handleClick(chipData)}>
         <Text style={styles.clear}>&times;</Text>
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 };

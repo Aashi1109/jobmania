@@ -1,3 +1,4 @@
+import { FieldValue } from "firebase/firestore";
 import { AuthScreenStagesE } from "./enums";
 
 interface SkillItemI {
@@ -22,10 +23,26 @@ interface IPopup {
   prevPopupTime?: number;
   popups: {
     message: string;
-    type: "success" | "error" | "info";
-    popupHead: string;
+    type?: "success" | "error" | "info";
+    popupHead?: string;
     id?: number;
   }[];
+}
+export interface UserModelI {
+  fullName?: string;
+  userName?: string;
+  profileImage?: { profileUrl: string };
+  email?: string;
+  location?: { lat: number; long: number; address: string };
+  description?: string;
+  skills?: Array<string>;
+  resume?: { fileName: string; resumeUrl: string };
+  heading?: string;
+  links?: Object;
+  appliedJobs?: [];
+  savedJobs?: [];
+  createdAt?: FieldValue;
+  id?: string;
 }
 
 export { AuthScreenStagesI, SkillItemI, AuthFormInputsI, IPopup };
