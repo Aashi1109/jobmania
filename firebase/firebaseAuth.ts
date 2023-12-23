@@ -98,12 +98,15 @@ class AuthHelpers {
    */
   googleAuth = async () => {
     const googleProvider = new GoogleAuthProvider();
+    // Set custom parameters to always prompt for account selection
+    googleProvider.setCustomParameters({ prompt: "select_account" });
 
     try {
       const result = await signInWithPopup(this.authRef, googleProvider);
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential.accessToken;
-      return result.user;
+      console.log("operation type -> ", result.operationType);
+      return { user: result.user, token };
     } catch (error) {
       console.error("Google authentication error:", error);
       throw error;

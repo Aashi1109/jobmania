@@ -6,34 +6,25 @@ import { useForm } from "react-hook-form";
 
 import styles from "./authform.style";
 import { COLORS, icons } from "@/constants";
-import { AuthScreenStagesE } from "@/definitions/enums";
+import { AuthProviderE, AuthScreenStagesE } from "@/definitions/enums";
 import CustomInput from "@/components/common/inputs/customInput/CustomInput";
 import VerticalDivider from "@/components/common/VerticalDivider";
 import Button from "@/components/common/Button";
 import authFormSchema from "@/utils/validations/authFormSchema";
 
-const providerList = ["google"];
 const AuthForm = ({
   isLoginForm = true,
   setData,
   isLoading,
+  prevData,
 }: {
   isLoginForm?: boolean;
   setData: Function;
   isLoading: boolean;
+  prevData?: { email: string | null };
 }) => {
-  const [authProvider, setAuthProvider] = useState(providerList[0]);
   const [isLogin, setIsLogin] = useState(isLoginForm);
 
-  // const defaultValues = {
-  //   email: "",
-  //   password: "",
-  // };
-  // if (!isLogin) {
-  //   defaultValues['username'] = ""
-  // }
-
-  // form
   const {
     control,
     handleSubmit,
@@ -47,30 +38,18 @@ const AuthForm = ({
       username: "",
     },
   });
+  const isEmailEditable = isLogin ? true : prevData && true;
+  // console.log("isEmailEditable -> ", isEmailEditable);
+  // console.log("prevData -> ", prevData);
 
   const forgotPasswordHandler = () => {};
-  const continueWithHandler = () => {
-    if (authProvider == providerList[0]) {
-      if (isLogin) {
-      } else {
-      }
+  const continueWithGoogleHandler = (providerName: AuthProviderE) => {
+    if (providerName == AuthProviderE.Google) {
+      setData({ stage: AuthScreenStagesE.GOOGLE_AUTH });
     }
   };
 
-  const handleButtonClick = async () => {
-    try {
-      const data = await handleSubmit((formData) => {
-        console.log("formdata -> ", formData);
-        return formData;
-      })();
-      console.log(data);
-    } catch (error) {
-      console.error("Form submission error:", error);
-      // Handle the error, such as showing an error message
-    }
-  };
   const onSubmit = (data) => {
-    console.log(data);
     if (isLogin) {
       setData({ stage: AuthScreenStagesE.LOGIN, data });
     } else {
@@ -83,8 +62,12 @@ const AuthForm = ({
   const onError = (error) => console.log(error);
 
   useEffect(() => {
+    setIsLogin(isLoginForm);
     setValue("username", isLogin ? "@invalid@" : "");
-  }, [isLogin]);
+    setValue("password", prevData ? "dummyPassword" : "");
+    setValue("email", prevData?.email ?? "");
+    // setIsLogin(prevState => prevState && )
+  }, [isLogin, isLoginForm]);
 
   return (
     <View style={styles.container}>
@@ -98,41 +81,48 @@ const AuthForm = ({
       )}
       <CustomInput
         label="email"
+        editable={isEmailEditable}
         control={control}
         placeholder="jobmania@email.com"
         errors={errors}
       />
-      <CustomInput
-        label="password"
-        control={control}
-        placeholder="Password"
-        errors={errors}
-        hideText={true}
-      />
+      {!prevData && (
+        <CustomInput
+          label="password"
+          control={control}
+          placeholder="Password"
+          errors={errors}
+          hideText={true}
+        />
+      )}
 
-      {isLogin && (
+      {isLogin && !prevData && (
         <Pressable onPress={forgotPasswordHandler}>
           <Text style={styles.forgotPassword}>Forgot Password ?</Text>
         </Pressable>
       )}
 
       {/* Continue with section */}
-      <View style={styles.continueWith}>
-        <View style={styles.continueDivider}>
-          <VerticalDivider backgroundColor={COLORS.gray2} />
-          <Text>or continue with</Text>
-          <VerticalDivider backgroundColor={COLORS.gray2} />
-        </View>
-        <Pressable onPress={continueWithHandler}>
-          <View style={{ width: 30, height: 30, marginHorizontal: "auto" }}>
-            <Image
-              style={{ width: "100%", height: "100%" }}
-              source={icons.googleIcon}
-              resizeMode="contain"
-            />
+      {!prevData && (
+        <View style={styles.continueWith}>
+          <View style={styles.continueDivider}>
+            <VerticalDivider backgroundColor={COLORS.gray2} />
+            <Text>or continue with</Text>
+            <VerticalDivider backgroundColor={COLORS.gray2} />
           </View>
-        </Pressable>
-      </View>
+          <Pressable
+            onPress={() => continueWithGoogleHandler(AuthProviderE.Google)}
+          >
+            <View style={{ width: 30, height: 30, marginHorizontal: "auto" }}>
+              <Image
+                style={{ width: "100%", height: "100%" }}
+                source={icons.googleIcon}
+                resizeMode="contain"
+              />
+            </View>
+          </Pressable>
+        </View>
+      )}
 
       <Button
         label={isLogin ? "Login" : "Sign up"}

@@ -21,6 +21,7 @@ class User {
   links: Object;
 
   constructor(userData: UserModelI) {
+    console.log(userData);
     this.id = userData.id;
     this.userName = userData.userName;
     this.fullName = userData.fullName;

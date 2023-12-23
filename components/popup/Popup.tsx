@@ -62,8 +62,6 @@ const Popup = () => {
       return () => clearTimeout(timeout);
     }
   }, [opacityAnim, popups, translateYAnim]);
-  console.log("popups -> ", popups);
-  console.log("showPopup -> ", showPopup);
 
   return (
     <View style={styles.container}>

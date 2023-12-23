@@ -8,6 +8,9 @@ enum AuthScreenStagesE {
   REGISTER_STAGE_3,
   REGISTER_STAGE_4,
   REGISTER_COMPLETE,
+
+  // Providers auth
+  GOOGLE_AUTH,
 }
 enum AvatarProgressE {
   Nothing = 0,
@@ -16,5 +19,9 @@ enum AvatarProgressE {
   Stage3 = 0.5,
   Stage4 = 0.75,
   Complete = 1,
+}
+
+export enum AuthProviderE {
+  Google,
 }
 export { AuthScreenStagesE, AvatarProgressE };

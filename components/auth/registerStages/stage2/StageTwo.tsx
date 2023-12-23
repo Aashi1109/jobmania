@@ -13,9 +13,11 @@ import CustomInput from "@/components/common/inputs/customInput/CustomInput";
 const StageTwo = ({
   setData,
   isLoading,
+  prevData,
 }: {
   setData: Function;
   isLoading: boolean;
+  prevData?: { fullName: string };
 }) => {
   const {
     control,
@@ -25,12 +27,13 @@ const StageTwo = ({
   } = useForm({
     resolver: yupResolver(stageTwoSchema),
     defaultValues: {
-      fullName: "",
+      fullName: prevData ? prevData.fullName : "",
       about: "",
       profileHeading: "",
       location: "",
     },
   });
+  console.log("stage 2 called");
 
   const onSubmit = (data) => {
     console.log("Form data submitted:", data);

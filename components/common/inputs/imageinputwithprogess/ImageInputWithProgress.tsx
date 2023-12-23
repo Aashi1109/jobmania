@@ -2,14 +2,16 @@ import * as ImagePicker from "expo-image-picker";
 
 import { Pressable, View } from "react-native";
 import CircularAvatarWithProgress from "../../circularprogress/CircularAvatarWithProgress";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const ImageInputWithProgress = ({
   setData,
   stepProgress,
+  imageUri,
 }: {
   setData: Function;
   stepProgress: number;
+  imageUri?: string;
 }) => {
   const [pickedFile, setPickedFile] = useState(null);
   const pickImageAsync = async () => {
@@ -27,6 +29,12 @@ const ImageInputWithProgress = ({
       setPickedFile(null);
     }
   };
+
+  useEffect(() => {
+    if (imageUri) {
+      setPickedFile(imageUri);
+    }
+  }, [imageUri]);
 
   return (
     <Pressable onPress={pickImageAsync}>

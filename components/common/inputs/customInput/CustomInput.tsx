@@ -10,6 +10,7 @@ interface CustomInputProps {
   placeholder: string;
   labelText?: string;
   hideText?: boolean;
+  editable?: boolean;
 }
 const CustomInput = ({
   label,
@@ -18,6 +19,7 @@ const CustomInput = ({
   hideText = false,
   placeholder,
   errors,
+  editable = true,
 }: CustomInputProps) => {
   return (
     <View style={styles.container}>
@@ -29,6 +31,7 @@ const CustomInput = ({
         name={label}
         render={({ field: { onBlur, onChange, value } }) => (
           <TextInput
+            editable={editable}
             style={styles.input}
             placeholder={placeholder}
             onChangeText={onChange}

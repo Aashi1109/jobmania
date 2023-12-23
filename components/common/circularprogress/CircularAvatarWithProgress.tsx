@@ -17,6 +17,9 @@ const CircularAvatarWithProgress = ({
   const Radius = size / 2 - Math.round(strokeWidth / 2);
   const circleLength = Radius * 2 * Math.PI;
 
+  const imageUri = selectedImage?.startsWith("http")
+    ? { uri: selectedImage }
+    : selectedImage;
   return (
     <View style={styles.container}>
       <View style={styles.progress}>
@@ -44,7 +47,7 @@ const CircularAvatarWithProgress = ({
       </View>
       <View style={[styles.avatar, { width: size * 0.7, height: 0.7 * size }]}>
         <Image
-          source={selectedImage ? selectedImage : images.profile}
+          source={selectedImage ? imageUri : images.profile}
           style={styles.image}
         />
       </View>
