@@ -125,7 +125,6 @@ const JobDetails = () => {
           }
         />
       </>
-      dh
     </SafeAreaView>
   );
 };

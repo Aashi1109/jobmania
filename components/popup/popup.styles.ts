@@ -1,16 +1,22 @@
 import { SIZES } from "@/constants";
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    top: "5%",
-    left: "50%",
+
     zIndex: 1000,
-    transform: "translateX(-50%)",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    // left: "50%",
+    // transform: "translateX(-50%)",
     maxHeight: 500,
     width: "100%",
-    overflow: "hidden",
+    pointerEvents: "none",
+    flexDirection: "row",
+    // alignContent: "center",
     justifyContent: "center",
   },
   popup: {
@@ -24,6 +30,7 @@ const styles = StyleSheet.create({
     marginBottom: SIZES.medium,
     marginHorizontal: "auto",
   },
+  popupContent: {},
   popupText: {
     fontSize: 16,
     color: "white",
@@ -37,7 +44,6 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
   },
-  popupContent: {},
   popupHead: {
     fontWeight: "bold",
   },

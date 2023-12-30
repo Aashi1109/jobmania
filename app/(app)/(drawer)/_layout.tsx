@@ -3,7 +3,7 @@ import CustomDrawerContent from "@/components/drawer/CustomDrawerContent";
 import { COLORS, SIZES, icons } from "@/constants";
 import { useAuth } from "@/context/AuthContext";
 import { Drawer } from "expo-router/drawer";
-import { Image } from "react-native";
+import { Image, Platform } from "react-native";
 import { ActivityIndicator, View } from "react-native";
 
 const _layout = () => {
@@ -38,7 +38,7 @@ const _layout = () => {
           color: COLORS.primary,
           padding: 0,
           marginLeft: -20,
-          marginTop: 5,
+          marginTop: Platform.OS == "web" ? 5 : 0,
         },
       }}
       drawerContent={(props) => (

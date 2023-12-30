@@ -9,7 +9,6 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 5,
     backgroundColor: "#F5F5F5",
-    placeholderTextColor: "#CACACA",
     paddingVertical: 13,
     paddingHorizontal: 18,
   },

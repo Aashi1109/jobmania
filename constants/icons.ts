@@ -18,6 +18,7 @@ import saved from "../assets/icons/saved.png";
 import home from "../assets/icons/home.png";
 import profileIcon from "../assets/icons/profileIcon.png";
 import moveUp from "../assets/icons/moveUp.png";
+import email from "../assets/icons/email.png";
 
 export default {
   heart,
@@ -30,6 +31,7 @@ export default {
   location,
   chevronLeft,
   editIcon,
+  email,
   chevronRight,
   linkedIcon,
   twitterIcon,

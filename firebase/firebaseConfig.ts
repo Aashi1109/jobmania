@@ -1,19 +1,24 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBg_VYqaAdcwPeMm7KieN8DqlmtFnOU504",
-  authDomain: "jobmania-19427.firebaseapp.com",
-  projectId: "jobmania-19427",
-  storageBucket: "jobmania-19427.appspot.com",
-  messagingSenderId: "76403981927",
-  appId: "1:76403981927:web:35e277632ddba3913b1ec2",
-  measurementId: "G-RRXSBQ1N4H",
+  apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY ?? "",
+  authDomain: process.env.EXPO_PUBLIC_FIREBASE_DOMAIN ?? "",
+  projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID ?? "",
+  storageBucket: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET ?? "",
+  messagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID ?? "",
+  appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID ?? "",
+  measurementId: process.env.EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID ?? "",
 };
+
+export const expoClientId = process.env.EXPO_PUBLIC_CLIENT_ID;
+export const iosClientId = process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID;
+export const androidClientId = process.env.EXPO_PUBLIC_IOS_CLIENT_ID;
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

@@ -79,7 +79,7 @@ const UserProfileModalData = ({ userData }: { userData: User | null }) => {
                 Linking.openURL(mailtoUrl);
               }}
             >
-              <Image source={icons.chevronLeft} style={styles.footerLogoItem} />
+              <Image source={icons.email} style={styles.footerLogoItem} />
             </Pressable>
           </View>
         </>

@@ -6,7 +6,6 @@ import { Redirect } from "expo-router";
 import { ActivityIndicator, Text, View } from "react-native";
 
 const auth = () => {
-  const { dispatch } = usePopup();
   const { user, loading } = useAuth();
   if (loading) {
     return (

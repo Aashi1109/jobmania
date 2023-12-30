@@ -9,7 +9,7 @@ import {
 } from "react-native";
 
 import styles from "./dropdown.style";
-import { skillsList } from "@/constants";
+import { COLORS, skillsList } from "@/constants";
 import ChipList from "../../chips/chiplist/ChipList";
 import { SkillItemI } from "@/definitions/interfaces";
 
@@ -102,6 +102,7 @@ const DropdownSearchableInput = ({ setData }: { setData: Function }) => {
           style={styles.input}
           value={searchQuery}
           placeholder={"Add top 3 skills"}
+          placeholderTextColor={COLORS.inputPlaceHolderColor}
           onChangeText={handleSearchQuery}
           onBlur={() => {
             setTimeout(() => {

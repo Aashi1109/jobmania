@@ -1,14 +1,15 @@
 import {
   Auth,
   createUserWithEmailAndPassword,
-  getAuth,
   GoogleAuthProvider,
   onAuthStateChanged,
+  signInWithCredential,
   signInWithEmailAndPassword,
   signInWithPopup,
-  signOut as signOutUser, // Renamed to avoid conflicts
+  signOut as signOutUser,
+  User, // Renamed to avoid conflicts
 } from "firebase/auth";
-import app from "./firebaseConfig";
+import authRef from "./authRef";
 
 /**
  * Contains methods for authentication of `User` using `Firebase` auth service
@@ -17,7 +18,7 @@ class AuthHelpers {
   authRef: Auth;
 
   constructor() {
-    this.authRef = getAuth(app);
+    this.authRef = authRef;
   }
 
   /**
@@ -109,6 +110,36 @@ class AuthHelpers {
       return { user: result.user, token };
     } catch (error) {
       console.error("Google authentication error:", error);
+      throw error;
+    }
+  };
+
+  /**
+   * Signs in a user with Google credentials using the provided Google ID token.
+   *
+   * @param {string} idToken - Google ID token used for authentication.
+   * @returns {Promise<string | null>} - A promise that resolves with the user ID if authentication is successful,
+   * or `null` if authentication fails.
+   * @throws {Error} - Throws an error if the provided ID token is invalid or if an authentication error occurs.
+   */
+  signInWithGoogleCredentials = async (
+    idToken: string
+  ): Promise<User | null> => {
+    try {
+      // Create Google credentials from the provided ID token
+      const credentials = GoogleAuthProvider.credential(idToken);
+
+      // Throw an error if credentials are invalid
+      if (!credentials) throw Error("Invalid idToken provided");
+
+      // Sign in with the Google credentials
+      const signInResp = await signInWithCredential(this.authRef, credentials);
+
+      // Return the user ID if authentication is successful, otherwise return null
+      return signInResp?.user ?? null;
+    } catch (error) {
+      // Throw an error if authentication fails
+      console.error("Google credentials authentication error:", error);
       throw error;
     }
   };

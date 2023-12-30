@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     alignItems: "baseline",
   },
   text: {
-    fontWeight: "bold",
+    fontWeight: "900",
   },
 });
 

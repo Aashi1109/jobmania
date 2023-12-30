@@ -1,5 +1,4 @@
-import React from "react";
-import { Image, Text, Pressable, View } from "react-native";
+import { Image, Platform, Pressable, View } from "react-native";
 
 import styles from "./screenheader.style";
 import { SIZES } from "@/constants";
@@ -11,7 +10,7 @@ const ScreenHeaderBtn = ({
   isUri = false,
 }) => {
   return (
-    <View style={{ margin: SIZES.medium }}>
+    <View style={Platform.OS == "web" ? { margin: SIZES.medium } : {}}>
       <Pressable style={styles.btnContainer} onPress={handlePress}>
         <Image
           source={isUri ? { uri: iconUrl } : iconUrl}

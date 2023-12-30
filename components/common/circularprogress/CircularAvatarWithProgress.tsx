@@ -1,7 +1,7 @@
-import React from "react";
 import { View, Image } from "react-native";
 import styles from "./circularavatarprogress.style";
 import { COLORS, images } from "@/constants";
+import { Circle, Svg } from "react-native-svg";
 
 const CircularAvatarWithProgress = ({
   strokeWidth,
@@ -17,14 +17,17 @@ const CircularAvatarWithProgress = ({
   const Radius = size / 2 - Math.round(strokeWidth / 2);
   const circleLength = Radius * 2 * Math.PI;
 
-  const imageUri = selectedImage?.startsWith("http")
-    ? { uri: selectedImage }
-    : selectedImage;
+  const imageUri =
+    selectedImage?.startsWith("http") || selectedImage?.startsWith("file:///")
+      ? { uri: selectedImage }
+      : selectedImage;
+
+  console.log(imageUri);
   return (
     <View style={styles.container}>
       <View style={styles.progress}>
-        <svg width={size} height={size}>
-          <circle
+        <Svg width={size} height={size}>
+          <Circle
             cx={size / 2}
             cy={size / 2}
             r={Radius}
@@ -32,7 +35,7 @@ const CircularAvatarWithProgress = ({
             fill={"#fff"}
             strokeWidth={strokeWidth}
           />
-          <circle
+          <Circle
             cx={size / 2}
             cy={size / 2}
             r={Radius}
@@ -43,7 +46,7 @@ const CircularAvatarWithProgress = ({
             strokeDashoffset={circleLength * (1 - circleProgress)}
             strokeLinecap="round"
           />
-        </svg>
+        </Svg>
       </View>
       <View style={[styles.avatar, { width: size * 0.7, height: 0.7 * size }]}>
         <Image

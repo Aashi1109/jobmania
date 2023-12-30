@@ -3,6 +3,7 @@ import { useFonts } from "expo-font";
 import { AuthProvider } from "@/context/AuthContext";
 import PopupProvider from "@/context/PopupContext";
 import Popup from "@/components/popup/Popup";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 // import * as SplashScreen from "expo-splash-screen";
 
 // SplashScreen.preventAutoHideAsync();
@@ -14,9 +15,9 @@ export const unstable_settings = {
 
 const Layout = () => {
   const [fontsLoaded] = useFonts({
-    DMBold: require("../assets/fonts/DMSans-Bold.ttf"),
-    DMMedium: require("../assets/fonts/DMSans-Medium.ttf"),
-    DMRegular: require("../assets/fonts/DMSans-Regular.ttf"),
+    PoppinsBold: require("../assets/fonts/Poppins-Bold.ttf"),
+    PoppinsMedium: require("../assets/fonts/Poppins-Medium.ttf"),
+    PoppinsRegular: require("../assets/fonts/Poppins-Regular.ttf"),
   });
 
   if (!fontsLoaded) {
@@ -24,12 +25,14 @@ const Layout = () => {
   }
 
   return (
-    <AuthProvider>
-      <PopupProvider>
-        <Popup />
-        <Slot />
-      </PopupProvider>
-    </AuthProvider>
+    <SafeAreaProvider>
+      <AuthProvider>
+        <PopupProvider>
+          <Popup />
+          <Slot />
+        </PopupProvider>
+      </AuthProvider>
+    </SafeAreaProvider>
   );
 };
 

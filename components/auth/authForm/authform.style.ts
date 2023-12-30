@@ -5,10 +5,6 @@ const styles = StyleSheet.create({
   container: {
     gap: 14,
   },
-
-  //   inputGroup: {
-  //     marginBottom: 14,
-  //   },
   forgotPassword: {
     color: COLORS.gray,
     fontSize: 12,
@@ -27,6 +23,7 @@ const styles = StyleSheet.create({
   },
   authAsk: {
     flexDirection: "row",
+    justifyContent: "center",
   },
   authAskText: {
     color: COLORS.gray,

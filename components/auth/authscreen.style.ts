@@ -1,26 +1,30 @@
-import { COLORS } from "@/constants";
+import { COLORS, SIZES } from "@/constants";
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
     position: "relative",
-    width: "100%",
     height: "100%",
   },
   bgContainer: {
     position: "absolute",
     top: 0,
     left: 0,
+    bottom: 0,
+    right: 0,
     width: "100%",
     height: "100%",
+    flex: 1,
+    alignItems: "center", // Center items horizontally
+    justifyContent: "center",
   },
   bgBottom: {
-    height: "45%",
+    flex: 4.5,
     width: "100%",
     backgroundColor: COLORS.gray2,
   },
   bgTop: {
-    height: "55%",
+    flex: 5.5,
     width: "100%",
     backgroundColor: COLORS.tertiary,
   },
@@ -33,8 +37,8 @@ const styles = StyleSheet.create({
   bgHeadContainer: {
     position: "absolute",
     top: 136,
-    left: "50%",
-    transform: "translateX(-50%)",
+    justifyContent: "center",
+    flexDirection: "row",
   },
   bgHeadContainerShifted: {
     position: "absolute",
@@ -45,7 +49,10 @@ const styles = StyleSheet.create({
   content: {
     marginTop: 253,
     gap: 12,
-    marginHorizontal: "auto",
+    height: "100%",
+    paddingBottom: SIZES.medium,
+    alignContent: "center",
+    alignItems: "center",
   },
 });
 

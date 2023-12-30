@@ -1,4 +1,4 @@
-import { Image, Pressable, Text, View } from "react-native";
+import { Image, Platform, Pressable, Text, View } from "react-native";
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -12,7 +12,13 @@ const CustomDrawerContent = (props: any) => {
   const { signOut, userName } = props;
   return (
     <View
-      style={{ flex: 1, paddingVertical: 45, paddingHorizontal: 32, gap: 20 }}
+      style={{
+        flex: 1,
+        paddingTop: Platform.OS == "web" ? 45 : 70,
+        paddingBottom: Platform.OS == "web" ? 45 : 30,
+        paddingHorizontal: 32,
+        gap: Platform.OS == "web" ? 20 : 0,
+      }}
     >
       <HeadText fontSize={34} color={COLORS.tertiary} />
       <View style={{ gap: 10 }}>
@@ -23,7 +29,10 @@ const CustomDrawerContent = (props: any) => {
       </View>
       <VerticalDivider width={"40%"}></VerticalDivider>
 
-      <DrawerContentScrollView {...props} style={{ marginHorizontal: -20 }}>
+      <DrawerContentScrollView
+        {...props}
+        style={{ marginHorizontal: -20, marginTop: -20 }}
+      >
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
       <Pressable onPress={() => signOut()}>

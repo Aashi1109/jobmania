@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 5,
     backgroundColor: COLORS.inputBgColor,
-    placeholderTextColor: COLORS.inputPlaceHolderColor,
+
     paddingVertical: 13,
     paddingHorizontal: 18,
   },

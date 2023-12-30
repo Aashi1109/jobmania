@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import { Image, Platform, Pressable, Text, View } from "react-native";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -38,7 +38,7 @@ const AuthForm = ({
       username: "",
     },
   });
-  const isEmailEditable = isLogin ? true : prevData && true;
+  const isEmailEditable = isLogin ? true : !prevData;
   // console.log("isEmailEditable -> ", isEmailEditable);
   // console.log("prevData -> ", prevData);
 
@@ -54,7 +54,9 @@ const AuthForm = ({
       setData({ stage: AuthScreenStagesE.LOGIN, data });
     } else {
       setData({
-        stage: AuthScreenStagesE.CHECK_EMAIL_EXISTS,
+        stage: prevData
+          ? AuthScreenStagesE.REGISTER_STAGE_2
+          : AuthScreenStagesE.CHECK_EMAIL_EXISTS,
         data,
       });
     }
@@ -103,7 +105,7 @@ const AuthForm = ({
       )}
 
       {/* Continue with section */}
-      {!prevData && (
+      {Platform.OS === "web" && !prevData && (
         <View style={styles.continueWith}>
           <View style={styles.continueDivider}>
             <VerticalDivider backgroundColor={COLORS.gray2} />
@@ -112,8 +114,14 @@ const AuthForm = ({
           </View>
           <Pressable
             onPress={() => continueWithGoogleHandler(AuthProviderE.Google)}
+            style={{ flexDirection: "row", justifyContent: "center" }}
           >
-            <View style={{ width: 30, height: 30, marginHorizontal: "auto" }}>
+            <View
+              style={{
+                width: 30,
+                height: 30,
+              }}
+            >
               <Image
                 style={{ width: "100%", height: "100%" }}
                 source={icons.googleIcon}

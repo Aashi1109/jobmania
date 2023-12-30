@@ -2,6 +2,7 @@ import { Text, TextInput, View } from "react-native";
 import { Control, Controller, FieldErrors, FieldValues } from "react-hook-form";
 
 import styles from "./custominput.styles";
+import { COLORS } from "@/constants";
 
 interface CustomInputProps {
   label: string;
@@ -38,6 +39,7 @@ const CustomInput = ({
             onBlur={onBlur}
             value={value}
             secureTextEntry={hideText}
+            placeholderTextColor={COLORS.inputPlaceHolderColor}
           />
         )}
       />

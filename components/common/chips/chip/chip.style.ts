@@ -1,9 +1,9 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { COLORS } from "@/constants";
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 6,
+    paddingVertical: Platform.OS === "web" ? 6 : 2,
     paddingHorizontal: 10,
     backgroundColor: COLORS.primary,
     borderRadius: 5,
@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     flexWrap: "nowrap",
     justifyContent: "space-between",
     alignItems: "center",
-    height: 29,
+    // height: 29,
   },
   text: {
     color: COLORS.white,
