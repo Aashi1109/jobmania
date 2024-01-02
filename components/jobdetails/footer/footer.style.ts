@@ -14,20 +14,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
   },
-  likeBtn: {
-    width: 55,
-    height: 55,
-    borderWidth: 1,
-    borderColor: "#F37453",
-    borderRadius: SIZES.medium,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  likeBtnImage: {
-    width: "40%",
-    height: "40%",
-    tintColor: "#F37453",
-  },
+  likeButtonContainer: { width: 55, height: 55 },
   applyBtn: {
     flex: 1,
     backgroundColor: "#FE7654",

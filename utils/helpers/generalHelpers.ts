@@ -1,3 +1,6 @@
+import axios from "axios";
+import { err } from "react-native-svg/lib/typescript/xml";
+
 export function generateRandomFileName(
   extension: string,
   fileName: string = null
@@ -20,28 +23,50 @@ export function formatDate(date) {
  * @returns {string} - The processed error message.
  */
 export const processAuthErrorMessage = (error) => {
-  console.log("fb error -> ", error.code);
-  // Convert error code to lowercase for case-insensitive comparison
-  const errorCode = error.code.toLowerCase();
-
-  // Check if the error code includes a specific substring and return the corresponding message
-  if (errorCode.includes("auth/popup-closed-by-user")) {
-    return "Authentication cancelled by the user.";
-  } else if (errorCode.includes("auth/wrong-password")) {
-    return "Incorrect password. Please try again.";
-  } else if (errorCode.includes("auth/user-not-found")) {
-    return "User not found. Please check your credentials.";
-  } else if (errorCode.includes("auth/invalid-email")) {
-    return "Invalid email address. Please enter a valid email.";
-  } else if (errorCode.includes("auth/email-already-in-use")) {
-    return "Email address is already in use. Please choose a different one.";
-  } else if (errorCode.includes("auth/weak-password")) {
-    return "Weak password. Please choose a stronger one.";
-  } else if (errorCode.includes("auth/invalid-credential")) {
-    return "Invalid credentails provided";
-  } else if (errorCode.includes("auth/invalid-login-credentials")) {
-    return "Invalid credentials provided.";
+  const errorMessage = error?.message;
+  if (errorMessage?.startsWith("@custom@")) {
+    return errorMessage.replace("@custom@", "");
   } else {
-    return "An error occurred during authentication. Please try again later.";
+    console.log("fb error -> ", error.code);
+    // Convert error code to lowercase for case-insensitive comparison
+    const errorCode = error.code.toLowerCase();
+
+    // Check if the error code includes a specific substring and return the corresponding message
+    if (errorCode.includes("auth/popup-closed-by-user")) {
+      return "Authentication cancelled by the user.";
+    } else if (errorCode.includes("auth/wrong-password")) {
+      return "Incorrect password. Please try again.";
+    } else if (errorCode.includes("auth/user-not-found")) {
+      return "User not found. Please check your credentials.";
+    } else if (errorCode.includes("auth/invalid-email")) {
+      return "Invalid email address. Please enter a valid email.";
+    } else if (errorCode.includes("auth/email-already-in-use")) {
+      return "Email address is already in use. Please choose a different one.";
+    } else if (errorCode.includes("auth/weak-password")) {
+      return "Weak password. Please choose a stronger one.";
+    } else if (errorCode.includes("auth/invalid-credential")) {
+      return "Invalid credentails provided";
+    } else if (errorCode.includes("auth/invalid-login-credentials")) {
+      return "Invalid credentials provided.";
+    } else {
+      return "An error occurred during authentication. Please try again later.";
+    }
   }
+};
+
+export const fetchDataJSearch = async (endPoint: string, query: object) => {
+  const options = {
+    method: "GET",
+    url: `https://jsearch.p.rapidapi.com/${endPoint}`,
+    params: {
+      ...query,
+    },
+    headers: {
+      "X-RapidAPI-Key": "KJwZZIJSFimshuivMSVGaiYzkRomp15f2vKjsnK4bKzuUzVLzA",
+      "X-RapidAPI-Host": "jsearch.p.rapidapi.com",
+    },
+  };
+
+  const response = await axios.request(options);
+  return response?.data?.data;
 };

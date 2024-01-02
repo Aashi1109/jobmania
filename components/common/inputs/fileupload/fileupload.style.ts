@@ -1,4 +1,4 @@
-import { COLORS } from "@/constants";
+import { COLORS, SIZES } from "@/constants";
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   fileUploadText: {
-    fontSize: 12,
+    fontSize: SIZES.medium,
     color: COLORS.gray,
   },
   fileUploadImageContainer: {

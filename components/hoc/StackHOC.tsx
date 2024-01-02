@@ -13,6 +13,7 @@ const StackHOC = ({ children }) => {
   const navigation = useNavigation();
 
   const { user } = useAuth();
+  const userProfileImage = user?.profileImage?.profileUrl;
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const toggleModal = () => {
@@ -36,10 +37,10 @@ const StackHOC = ({ children }) => {
           ),
           headerRight: () => (
             <ScreenHeaderBtn
-              iconUrl={user ? user.profileImage.profileUrl : images.profile}
+              iconUrl={userProfileImage ? userProfileImage : images.profile}
               dimension="100%"
               handlePress={toggleModal}
-              isUri={user !== null}
+              isUri={!!userProfileImage}
             />
           ),
 

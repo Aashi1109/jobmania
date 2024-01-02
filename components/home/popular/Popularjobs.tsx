@@ -12,12 +12,16 @@ import { COLORS, SIZES } from "../../../constants";
 import useFetch from "../../../hooks/useFetch";
 import PopularJobCard from "../../common/cards/popular/PopularJobCard";
 import { useRouter } from "expo-router";
+import { useAuth } from "@/context/AuthContext";
 
 const Popularjobs = () => {
   const router = useRouter();
   const [selectedJob, setSelectedJob] = useState();
+  const { user } = useAuth();
+
+  const userLocation = user?.location?.address;
   const { isLoading, error, data } = useFetch("search", {
-    query: "popular jobs, maharashtra",
+    query: `popular jobs, ${userLocation}`,
     num_pages: 1,
   });
 
@@ -36,7 +40,7 @@ const Popularjobs = () => {
       </View>
       <View style={styles.cardsContainer}>
         {isLoading ? (
-          <ActivityIndicator size={"large"} colors={COLORS.primary} />
+          <ActivityIndicator size={"large"} color={COLORS.primary} />
         ) : error ? (
           <Text>Something went wrong.</Text>
         ) : (

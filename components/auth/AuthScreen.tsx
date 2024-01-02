@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { Text, View, Dimensions, ScrollView } from "react-native";
+import {
+  Text,
+  View,
+  Dimensions,
+  ScrollView,
+  Platform,
+  SafeAreaView,
+} from "react-native";
 import { useIdTokenAuthRequest as useGoogleIdTokenAuthRequest } from "expo-auth-session/providers/google";
 import { FirebaseError } from "firebase/app";
 
@@ -22,7 +29,6 @@ import StageFour from "./registerStages/stage4/StageFour";
 import StageThree from "./registerStages/stage3/StageThree";
 import UserFirestoreService from "@/firebase/firebaseFirestore";
 import User from "@/models/User";
-import Popup from "../popup/Popup";
 import { router } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 import { usePopup } from "@/context/PopupContext";
@@ -37,10 +43,11 @@ let inputData = {};
 const AuthScreen = () => {
   const { dispatch } = usePopup();
   const { signIn, signUp, getSetUser } = useAuth();
+  const AFTER_AUTH_ROUTE_PATH = "/(app)/home";
 
   // use states
   const [userStage, setUserStage] = useState<AuthScreenStagesE>(
-    AuthScreenStagesE.INTIAL
+    AuthScreenStagesE.REGISTER_STAGE_3
   );
   const [avatarProgress, setAvatarProgress] = useState(AvatarProgressE.Nothing);
   const [isLoading, setIsLoading] = useState(false);
@@ -78,7 +85,6 @@ const AuthScreen = () => {
           (prevState) => prevState + AvatarProgressE.ImagePresent
         );
       }
-      // setInputData((prevData) => ({ ...inputData, ...data }));
       inputData = { ...inputData, ...data };
     }
     if (stage) {
@@ -99,8 +105,6 @@ const AuthScreen = () => {
   console.log("inputData -> ", inputData);
   console.log("====================================");
   const handleProcessing = async () => {
-    console.log("handleProcessing called");
-
     const authHelpers = new AuthHelpers();
     const userDBHelpers = new UserFirestoreService();
     const userData = {
@@ -115,7 +119,7 @@ const AuthScreen = () => {
         await signIn(userData.email, userData.password);
         if (await authHelpers.authObserver()) {
           setIsLoading(false);
-          router.replace("/(app)/home");
+          router.replace(AFTER_AUTH_ROUTE_PATH);
         }
       } else if (
         userStage === AuthScreenStagesE.CHECK_EMAIL_EXISTS &&
@@ -129,8 +133,9 @@ const AuthScreen = () => {
 
         if (isUserExists) {
           // TODO show error popup to user
-          alert("Email already exists");
+          // alert("Email already exists");
           setUserStage(AuthScreenStagesE.REGISTER);
+          throw Error("@custom@Email already exists");
         } else {
           setUserStage(AuthScreenStagesE.REGISTER_STAGE_2);
           setAvatarProgress((prevState) => prevState + AvatarProgressE.Stage2);
@@ -154,12 +159,12 @@ const AuthScreen = () => {
           if (userCreateResp) {
             console.log("user created successfully");
             // Route user to homepage and save its authentication state
-            router.replace("/(app)/(drawer)/home");
+            router.replace(AFTER_AUTH_ROUTE_PATH);
             // await getSetUser(userId);
           }
         }
       } else if (userStage === AuthScreenStagesE.GOOGLE_AUTH) {
-        throw Error("Pop check error");
+        // throw Error("Pop check error");
         setIsLoading(true);
         // This code only works for web version
         const googleAuthResult = await authHelpers.googleAuth();
@@ -168,7 +173,6 @@ const AuthScreen = () => {
         if (user) {
           // Check if they are already a user
           const userData = await userDBHelpers.getUserById(user.uid);
-          console.log("userData -> ", userData);
 
           if (!userData) {
             // If new user make them go through the signup process
@@ -197,7 +201,7 @@ const AuthScreen = () => {
     } catch (error: FirebaseError | any) {
       setPrevUserData(null);
       const errorMessage = processAuthErrorMessage(error);
-      console.log(errorMessage);
+      console.error(errorMessage);
 
       dispatch({
         type: "CREATE_POPUP",
@@ -301,7 +305,7 @@ const AuthScreen = () => {
   };
 
   const renderStageContent = () => {
-    console.log("Rendering stage content for:", userStage);
+    // console.log("Rendering stage content for:", userStage);
     switch (userStage) {
       case AuthScreenStagesE.INTIAL:
       case AuthScreenStagesE.LOGIN:
@@ -321,7 +325,6 @@ const AuthScreen = () => {
       case AuthScreenStagesE.FORGOT_PASSWORD:
         return null;
       case AuthScreenStagesE.REGISTER_STAGE_2:
-        console.log("render stage 2 called");
         return (
           <StageTwo
             setData={handleSetData}
@@ -340,18 +343,14 @@ const AuthScreen = () => {
   };
 
   useEffect(() => {
-    console.log("ufe called");
-
     handleProcessing();
   }, [userStage]);
-
-  console.log("userStage -> ", userStage);
+  console.log("userStage ->", userStage);
 
   useEffect(() => {
-    console.log("font size ufe called");
-    // Dynamically adjust font size based on screen width
     const screenWidth = Dimensions.get("window").width;
-    const calculatedFontSize = screenWidth * 0.214; // Adjust the multiplier as needed
+    const calculatedFontSize =
+      screenWidth * (Platform.OS === "web" ? 0.214 : 0.24); // Adjust the multiplier as needed
     setFontSize(calculatedFontSize);
   }, []);
 
@@ -362,50 +361,46 @@ const AuthScreen = () => {
   // }, [googleResponse]);
 
   return (
-    <SafeAreaProvider>
-      <ScrollView style={{ height: "100%" }}>
-        <View style={styles.container}>
-          {/* Background */}
-          <View style={styles.bgContainer}>
-            <View style={styles.bgTop}>
-              <Text style={[styles.bgText, { fontSize }]}>JobMania</Text>
-            </View>
-            <View style={styles.bgBottom} />
-            <View
-              ref={bgHeadRef}
-              style={
-                doStyleChange
-                  ? styles.bgHeadContainer
-                  : styles.bgHeadContainerShifted
-              }
-            >
-              <HeadText fontSize={doStyleChange ? 82 : 45} />
-            </View>
-          </View>
+    <View style={styles.container}>
+      {/* Background */}
+      <View style={styles.bgContainer}>
+        <View style={styles.bgTop}>
+          <Text style={[styles.bgText, { fontSize }]}>JobMania</Text>
+        </View>
+        <View style={styles.bgBottom} />
+        <View
+          ref={bgHeadRef}
+          style={
+            doStyleChange
+              ? styles.bgHeadContainer
+              : styles.bgHeadContainerShifted
+          }
+        >
+          <HeadText fontSize={doStyleChange ? 82 : 45} />
+        </View>
+      </View>
 
-          {/* Content */}
-          <View
-            style={[styles.content, !doStyleChange ? { marginTop: 200 } : {}]}
-          >
-            {doStyleChange && (
-              <BasicCard>
-                <WelcomeContent />
-              </BasicCard>
-            )}
+      {/* Content */}
+      <ScrollView>
+        <View style={[styles.content]}>
+          {doStyleChange && (
             <BasicCard>
-              {/* {userStage !== AuthScreenStagesE.LOGIN && (
+              <WelcomeContent />
+            </BasicCard>
+          )}
+          <BasicCard>
+            {userStage > AuthScreenStagesE.LOGIN && (
               <ImageInputWithProgress
                 setData={handleSetData}
                 stepProgress={avatarProgress}
                 imageUri={prevUserData ? prevUserData?.photoUrl : null}
               />
-            )} */}
-              {renderStageContent()}
-            </BasicCard>
-          </View>
+            )}
+            {renderStageContent()}
+          </BasicCard>
         </View>
       </ScrollView>
-    </SafeAreaProvider>
+    </View>
   );
 };
 

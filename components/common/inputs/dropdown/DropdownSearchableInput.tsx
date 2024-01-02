@@ -1,27 +1,19 @@
 import { useEffect, useState } from "react";
-import {
-  FlatList,
-  ScrollView,
-  Text,
-  TextInput,
-  Pressable,
-  View,
-} from "react-native";
+import { ScrollView, Text, TextInput, Pressable, View } from "react-native";
 
 import styles from "./dropdown.style";
-import { COLORS, skillsList } from "@/constants";
+import { COLORS, SIZES, skillsList } from "@/constants";
 import ChipList from "../../chips/chiplist/ChipList";
 import { SkillItemI } from "@/definitions/interfaces";
 
 const DropdownContentText = ({ textLabel, handlePress }) => {
   return (
-    <Pressable onPress={handlePress}>
-      <Text style={{ padding: 5 }}>{textLabel}</Text>
+    <Pressable onPressIn={handlePress} style={{ marginVertical: 2 }}>
+      <Text style={{ padding: 5, fontSize: SIZES.medium }}>{textLabel}</Text>
     </Pressable>
   );
 };
 const DropdownSearchableInput = ({ setData }: { setData: Function }) => {
-  const [dropdownTop, setDropdownTop] = useState(180);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState(skillsList);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -68,20 +60,15 @@ const DropdownSearchableInput = ({ setData }: { setData: Function }) => {
     }
 
     return (
-      <ScrollView
-        style={[styles.dropdownContainer]}
-        keyboardShouldPersistTaps="always" // Allow tapping outside the dropdown to dismiss the keyboard
-      >
+      <ScrollView style={styles.dropdownContainer} nestedScrollEnabled={true}>
         {filteredData.length !== 0 ? (
-          <FlatList
-            data={filteredData}
-            renderItem={({ item }) => (
-              <DropdownContentText
-                textLabel={item.title}
-                handlePress={() => handleDropdownItemPress(item)}
-              />
-            )}
-          />
+          filteredData.map((item) => (
+            <DropdownContentText
+              key={item.id}
+              textLabel={item.title}
+              handlePress={() => handleDropdownItemPress(item)}
+            />
+          ))
         ) : (
           <Text style={{ padding: 5 }}>No results found</Text>
         )}
@@ -107,7 +94,7 @@ const DropdownSearchableInput = ({ setData }: { setData: Function }) => {
           onBlur={() => {
             setTimeout(() => {
               toggleDropdown();
-            }, 200);
+            }, 300);
           }}
         />
       </View>

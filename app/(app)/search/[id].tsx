@@ -14,7 +14,7 @@ import axios from "axios";
 import { ScreenHeaderBtn } from "../../../components";
 import { COLORS, icons, SIZES } from "../../../constants";
 import styles from "../../../styles/search";
-import NearbyJobCard from "../../../components/common/cards/nearby/NearbyJobCard";
+import VerticalJobCard from "../../../components/common/cards/nearby/VerticalJobCard";
 
 const JobSearch = () => {
   const params = useGlobalSearchParams();
@@ -88,7 +88,7 @@ const JobSearch = () => {
       <FlatList
         data={searchResult}
         renderItem={({ item }) => (
-          <NearbyJobCard
+          <VerticalJobCard
             job={item}
             handleNavigate={() => router.push(`/job-details/${item.job_id}`)}
           />

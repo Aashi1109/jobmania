@@ -1,6 +1,7 @@
 import { Text, Pressable, View } from "react-native";
 
 import styles from "./chip.style";
+import { SkillItemI } from "@/definitions/interfaces";
 
 const Chip = ({
   chipData,

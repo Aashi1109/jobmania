@@ -11,15 +11,19 @@ import styles from "./welcome.style";
 import { icons, SIZES } from "../../../constants";
 import { useRouter } from "expo-router";
 import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 const jobTypes = ["Full-time", "Part-time", "Remote"];
 const Welcome = ({ searchTerm, setSearchTerm, handleClick }) => {
   const router = useRouter();
   const [activeJobType, setActiveJobType] = useState("Full-time");
+  const { user } = useAuth();
   return (
     <View>
       <View style={styles.container}>
-        <Text style={styles.userName}>Hello, Dummy</Text>
+        <Text style={styles.userName}>
+          Hello, {user?.fullName?.split(" ")[0]}
+        </Text>
         <Text style={styles.welcomeMessage}>Find your perfect job</Text>
       </View>
 

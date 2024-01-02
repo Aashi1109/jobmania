@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 import { useState } from "react";
 
-import { Nearbyjobs, Popularjobs, Welcome } from "@/components";
+import { VerticalJobList, Popularjobs, Welcome } from "@/components";
 
 import StackHOC from "@/components/hoc/StackHOC";
 
@@ -17,7 +17,14 @@ const Home = () => {
         }}
       />
       <Popularjobs />
-      <Nearbyjobs />
+      <VerticalJobList
+        heading="Nearby Jobs"
+        rightButtonProperties={{
+          isVisible: true,
+          routePath: "/search/Nearby Jobs",
+          text: "Show all",
+        }}
+      />
     </StackHOC>
   );
 };

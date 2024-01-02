@@ -29,6 +29,7 @@ const AuthForm = ({
     control,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(authFormSchema),
@@ -146,10 +147,12 @@ const AuthForm = ({
         </Text>
         <Pressable
           onPress={() => {
+            console.log("on press called");
+            reset();
             setData({
               stage: isLogin
                 ? AuthScreenStagesE.REGISTER
-                : AuthScreenStagesE.LOGIN,
+                : AuthScreenStagesE.INTIAL,
             });
             setIsLogin((prevState) => !prevState);
           }}

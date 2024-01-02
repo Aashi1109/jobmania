@@ -33,7 +33,6 @@ const StageTwo = ({
       location: "",
     },
   });
-  console.log("stage 2 called");
 
   const onSubmit = (data) => {
     console.log("Form data submitted:", data);
@@ -43,7 +42,9 @@ const StageTwo = ({
   return (
     <StageWrapper
       isLoading={isLoading}
-      handleNextClick={handleSubmit(onSubmit)}
+      handleNextClick={handleSubmit(onSubmit, (data) => {
+        console.log(data);
+      })}
       handleSkipClick={null}
     >
       <View style={styles.inputContainer}>

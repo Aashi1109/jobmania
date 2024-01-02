@@ -2,7 +2,7 @@ import ScreenHeaderBtn from "./common/header/ScreenHeaderBtn";
 
 // home screen
 import Welcome from "./home/welcome/Welcome";
-import Nearbyjobs from "./home/nearby/Nearbyjobs";
+import VerticalJobList from "./home/verticaljoblist/VerticalJobList";
 import Popularjobs from "./home/popular/Popularjobs";
 
 // job details screen
@@ -19,7 +19,7 @@ import Button from "./common/Button";
 export {
   ScreenHeaderBtn,
   Welcome,
-  Nearbyjobs,
+  VerticalJobList,
   Popularjobs,
   Company,
   VerticalDivider,

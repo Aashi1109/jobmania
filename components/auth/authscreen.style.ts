@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     position: "relative",
-    height: "100%",
+    flex: 1,
   },
   bgContainer: {
     position: "absolute",
@@ -13,8 +13,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     width: "100%",
-    height: "100%",
-    flex: 1,
+
     alignItems: "center", // Center items horizontally
     justifyContent: "center",
   },
@@ -48,11 +47,11 @@ const styles = StyleSheet.create({
 
   content: {
     marginTop: 253,
+    // marginBottom: 60,
     gap: 12,
-    height: "100%",
     paddingBottom: SIZES.medium,
-    alignContent: "center",
     alignItems: "center",
+    flexGrow: 1,
   },
 });
 

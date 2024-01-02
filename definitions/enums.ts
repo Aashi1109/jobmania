@@ -1,4 +1,5 @@
 enum AuthScreenStagesE {
+  _,
   INTIAL,
   LOGIN,
   REGISTER,

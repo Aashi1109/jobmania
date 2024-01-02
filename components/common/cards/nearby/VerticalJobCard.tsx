@@ -1,12 +1,13 @@
 import { Image, Text, Pressable, View } from "react-native";
 
-import styles from "./nearbyjobcard.style";
+import styles from "./verticaljobcard.style";
 import { checkReturnImageUrl } from "../../../../utils";
+import LikeButton from "../../likebutton/LikeButton";
 
-const NearbyJobCard = ({ job, handleNavigate }) => {
+const VerticalJobCard = ({ job, handleNavigate, showLikeButton }) => {
   return (
     <Pressable style={styles.container} onPress={handleNavigate}>
-      <Pressable style={styles.logoContainer}>
+      <View style={styles.logoContainer}>
         <Image
           source={{
             uri: checkReturnImageUrl(job.employer_logo),
@@ -14,7 +15,7 @@ const NearbyJobCard = ({ job, handleNavigate }) => {
           resizeMode="contain"
           style={styles.logoImage}
         />
-      </Pressable>
+      </View>
 
       <View style={styles.textContainer}>
         <Text style={styles.jobName} numberOfLines={1}>
@@ -23,8 +24,13 @@ const NearbyJobCard = ({ job, handleNavigate }) => {
 
         <Text style={styles.jobType}>{job?.job_employment_type ?? "N/A"}</Text>
       </View>
+      {showLikeButton && (
+        <View style={styles.likeButtonContainer}>
+          <LikeButton jobId={job?.job_id} />
+        </View>
+      )}
     </Pressable>
   );
 };
 
-export default NearbyJobCard;
+export default VerticalJobCard;
