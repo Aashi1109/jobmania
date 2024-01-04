@@ -22,6 +22,10 @@ const StageFour = ({
     formState: { errors },
   } = useForm({
     resolver: yupResolver(stageFourSchema),
+    defaultValues: {
+      linkedIn: "",
+      portfolio: "",
+    },
   });
 
   const handleClick = async () => {

@@ -48,7 +48,7 @@ const JobSearch = () => {
       setSearchResult(response.data.data);
     } catch (error) {
       setSearchError(error);
-      console.log(error);
+      // console.log(error);
     } finally {
       setSearchLoader(false);
     }
@@ -89,6 +89,7 @@ const JobSearch = () => {
         data={searchResult}
         renderItem={({ item }) => (
           <VerticalJobCard
+            showLikeButton={false}
             job={item}
             handleNavigate={() => router.push(`/job-details/${item.job_id}`)}
           />

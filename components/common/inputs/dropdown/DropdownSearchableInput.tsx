@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { ScrollView, Text, TextInput, Pressable, View } from "react-native";
+import { TouchableOpacity } from "react-native";
 
 import styles from "./dropdown.style";
 import { COLORS, SIZES, skillsList } from "@/constants";
 import ChipList from "../../chips/chiplist/ChipList";
 import { SkillItemI } from "@/definitions/interfaces";
+import VerticalDivider from "../../VerticalDivider";
 
 const DropdownContentText = ({ textLabel, handlePress }) => {
   return (
-    <Pressable onPressIn={handlePress} style={{ marginVertical: 2 }}>
+    <TouchableOpacity onPress={handlePress} style={{ marginVertical: 2 }}>
       <Text style={{ padding: 5, fontSize: SIZES.medium }}>{textLabel}</Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 const DropdownSearchableInput = ({ setData }: { setData: Function }) => {
@@ -44,7 +46,8 @@ const DropdownSearchableInput = ({ setData }: { setData: Function }) => {
     if (!selectedItems.length) {
       setFilteredData(skillsList);
     }
-    setIsDropdownVisible(!isDropdownVisible);
+
+    setIsDropdownVisible((prevState) => !prevState);
   };
 
   const handleChipCancelClick = (item: SkillItemI) => {
@@ -60,7 +63,35 @@ const DropdownSearchableInput = ({ setData }: { setData: Function }) => {
     }
 
     return (
-      <ScrollView style={styles.dropdownContainer} nestedScrollEnabled={true}>
+      <ScrollView
+        style={styles.dropdownContainer}
+        nestedScrollEnabled={true}
+        keyboardShouldPersistTaps={"handled"}
+        contentContainerStyle={{ padding: 10 }}
+      >
+        <View style={{ gap: 5 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <Text style={{ fontSize: SIZES.medium, textAlign: "center" }}>
+              All Skills
+            </Text>
+            <Pressable onPress={toggleDropdown} style={{ marginTop: -4 }}>
+              <Text
+                style={{
+                  fontSize: SIZES.large,
+                  fontWeight: "900",
+                }}
+              >
+                &times;
+              </Text>
+            </Pressable>
+          </View>
+          <VerticalDivider marginVertical={5} height={2} width={"100%"} />
+        </View>
         {filteredData.length !== 0 ? (
           filteredData.map((item) => (
             <DropdownContentText
@@ -91,11 +122,8 @@ const DropdownSearchableInput = ({ setData }: { setData: Function }) => {
           placeholder={"Add top 3 skills"}
           placeholderTextColor={COLORS.inputPlaceHolderColor}
           onChangeText={handleSearchQuery}
-          onBlur={() => {
-            setTimeout(() => {
-              toggleDropdown();
-            }, 300);
-          }}
+          // onBlur={toggleDropdown}
+          onFocus={() => setIsDropdownVisible(true)}
         />
       </View>
 

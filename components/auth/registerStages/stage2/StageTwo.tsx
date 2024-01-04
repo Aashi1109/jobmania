@@ -43,7 +43,7 @@ const StageTwo = ({
     <StageWrapper
       isLoading={isLoading}
       handleNextClick={handleSubmit(onSubmit, (data) => {
-        console.log(data);
+        // console.log(data);
       })}
       handleSkipClick={null}
     >

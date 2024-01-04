@@ -26,12 +26,12 @@ const Layout = () => {
 
   return (
     <SafeAreaProvider>
-      <AuthProvider>
-        <PopupProvider>
+      <PopupProvider>
+        <AuthProvider>
           <Popup />
           <Slot />
-        </PopupProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </PopupProvider>
     </SafeAreaProvider>
   );
 };

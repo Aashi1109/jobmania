@@ -147,7 +147,7 @@ const AuthForm = ({
         </Text>
         <Pressable
           onPress={() => {
-            console.log("on press called");
+            // console.log("on press called");
             reset();
             setData({
               stage: isLogin

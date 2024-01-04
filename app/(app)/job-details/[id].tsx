@@ -118,6 +118,7 @@ const JobDetails = () => {
         </ScrollView>
 
         <JobFooter
+          job={data[0] ?? null}
           jobId={jobId}
           url={
             data[0]?.job_google_link ??

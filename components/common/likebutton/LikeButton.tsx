@@ -6,7 +6,19 @@ import { useEffect, useState } from "react";
 import { Image, Pressable } from "react-native";
 import styles from "./likebutton.styles";
 
-const LikeButton = ({ jobId }: { jobId: string }) => {
+interface LikeButtonProps {
+  jobId: string;
+  employer_logo: string;
+  job_title: string;
+  job_employment_type: string;
+}
+
+const LikeButton = ({
+  jobId,
+  employer_logo,
+  job_employment_type,
+  job_title,
+}: LikeButtonProps) => {
   const { updateUserData, user, loading } = useAuth();
 
   const [isJobAlreadySaved, setIsJobAlreadySaved] = useState(false);
@@ -21,15 +33,20 @@ const LikeButton = ({ jobId }: { jobId: string }) => {
     let popupMessage;
     try {
       if (isJobAlreadySaved) {
-        console.log("in delete job");
+        // console.log("in delete job");
         updateData = {
           savedJobs: user?.savedJobs.filter((job) => job.jobId !== jobId),
         };
         popupMessage = "Job unsaved successfully";
       } else {
-        console.log("in save job");
         updateData = {
-          savedJobs: arrayUnion({ jobId, savedAt: Date.now() }),
+          savedJobs: arrayUnion({
+            jobId,
+            employer_logo,
+            job_employment_type,
+            job_title,
+            savedAt: Date.now(),
+          }),
         };
         popupMessage = "Job saved successfully";
       }

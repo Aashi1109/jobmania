@@ -17,11 +17,16 @@ class User {
     status: "In Process" | "Applied" | "Rejected";
   }>;
   createdAt: FieldValue;
-  savedJobs: Array<{ jobId: string; savedAt: Date }>;
+  savedJobs: Array<{
+    jobId: string;
+    savedAt: Date;
+    employer_logo: string;
+    job_title: string;
+    job_employment_type: string;
+  }>;
   links: Object;
 
   constructor(userData: UserModelI) {
-    console.log(userData);
     this.id = userData.id;
     this.userName = userData.userName;
     this.fullName = userData.fullName;

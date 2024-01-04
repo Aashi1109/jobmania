@@ -23,7 +23,6 @@ const ImageInputWithProgress = ({
 
     if (!result.canceled) {
       const fileFound = result.assets[0];
-      console.log(fileFound);
       setPickedFile(fileFound.uri);
       setData({ data: { profilePic: fileFound } });
     } else {

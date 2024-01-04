@@ -10,6 +10,7 @@ import {
   useState,
   ReactNode,
 } from "react";
+import { usePopup } from "./PopupContext";
 
 /**
  * AuthContextProps interface defines the shape of the authentication context.
@@ -17,8 +18,9 @@ import {
 interface AuthContextProps {
   user: User | null; // Replace with your actual user type
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string) => Promise<void>;
+  isUserInvalid: boolean;
+  signIn: (email: string, password: string) => Promise<string>;
+  signUp: (email: string, password: string) => Promise<string>;
   signOut: () => Promise<void>;
   updateUserData: (updateData: object) => Promise<any>;
   getSetUser: (userId: string) => Promise<any>;
@@ -42,8 +44,11 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null); // Replace with your actual user type
   const [loading, setLoading] = useState<boolean>(true);
+  const [isUserInvalid, setIsUserInvalid] = useState(false);
   const authHelpers = new AuthHelpers();
   const userFirestore = new UserFirestoreService();
+
+  const { dispatch: dispatchPopup } = usePopup();
 
   useEffect(() => {
     /**
@@ -56,7 +61,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // Fetch the latest user data here if needed
         try {
           const userData = await userFirestore.getUserById(isAuthenticated);
-          setUser(userData);
+          if (userData) {
+            setUser(userData);
+            setIsUserInvalid(false);
+          } else {
+            const isUserDeleted = await authHelpers.deleteUser();
+            if (!isUserDeleted) {
+              dispatchPopup({
+                type: "CREATE_POPUP",
+                payload: { message: "Unable to delete user" },
+              });
+            }
+            dispatchPopup({
+              type: "CREATE_POPUP",
+              payload: { message: "Something went wrong. Try signup again" },
+            });
+            setIsUserInvalid(true);
+          }
         } catch (error) {
           console.error("Error fetching user data:", error);
         }
@@ -73,12 +94,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
    *
    * @param {string} email - The user's email address.
    * @param {string} password - The user's password.
+   * @returns {string} - Id of the logged in user
    */
-  const signIn = async (email: string, password: string): Promise<void> => {
+  const signIn = async (email: string, password: string): Promise<string> => {
     try {
       const userId = await authHelpers.signIn(email, password);
       // Fetch and update user data if needed
       await getSetUser(userId);
+      return userId;
     } catch (error) {
       console.error("Error signing in:", error);
       throw error;
@@ -91,12 +114,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
    *
    * @param {string} email - The new user's email address.
    * @param {string} password - The new user's password.
+   * @returns {string} - Id of the created user
    */
-  const signUp = async (email: string, password: string): Promise<void> => {
+  const signUp = async (email: string, password: string): Promise<string> => {
     try {
       const userId = await authHelpers.signUp(email, password);
       // Fetch and update user data if needed
-      await getSetUser(userId);
+      // await getSetUser(userId);
+      return userId;
     } catch (error) {
       console.error("Error signing up:", error);
       throw error;
@@ -160,6 +185,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     signOut,
     updateUserData,
     getSetUser,
+    isUserInvalid,
   };
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;

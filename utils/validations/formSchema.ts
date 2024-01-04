@@ -9,5 +9,5 @@ export const stageTwoSchema = Yup.object().shape({
   fullName: Yup.string().min(2).required(),
   about: Yup.string().required(),
   profileHeading: Yup.string().optional(),
-  location: Yup.string().min(5).required(),
+  location: Yup.string().min(3).required(),
 });

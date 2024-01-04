@@ -1,6 +1,7 @@
 import {
   Auth,
   createUserWithEmailAndPassword,
+  deleteUser as deleteUserFA,
   GoogleAuthProvider,
   onAuthStateChanged,
   signInWithCredential,
@@ -169,6 +170,20 @@ class AuthHelpers {
     } finally {
       // Always delete the temporary user, whether successful or not
       await userCredential?.user?.delete();
+    }
+  };
+
+  /**
+   * Deletes an existing user from Firebase Authentication.
+   * @returns {Promise<void>} - A promise that resolves when the user is deleted.
+   */
+  deleteUser = async () => {
+    try {
+      await deleteUserFA(this.authRef.currentUser);
+      return true;
+    } catch (error) {
+      console.error("Error deleting user:", error.message);
+      throw error; // Re-throw the error for further handling
     }
   };
 }

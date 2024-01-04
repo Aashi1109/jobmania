@@ -4,6 +4,7 @@ const styles = StyleSheet.create({
   container: {
     gap: 10,
     flex: 1,
+    position: "relative",
   },
   input: {
     height: 45,
@@ -26,9 +27,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 4,
     elevation: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    maxHeight: 100,
+    maxHeight: 200,
+    // position: "absolute",
+    // top: 0,
+    // left: 0,
+    // width: "100%",
+    // zIndex: 100,
   },
 });
 

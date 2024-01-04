@@ -1,4 +1,5 @@
 import AuthScreen from "@/components/auth/AuthScreen";
+import Popup from "@/components/popup/Popup";
 import { COLORS } from "@/constants";
 import { useAuth } from "@/context/AuthContext";
 import { usePopup } from "@/context/PopupContext";

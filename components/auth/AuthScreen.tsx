@@ -42,12 +42,11 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 let inputData = {};
 const AuthScreen = () => {
   const { dispatch } = usePopup();
-  const { signIn, signUp, getSetUser } = useAuth();
-  const AFTER_AUTH_ROUTE_PATH = "/(app)/home";
+  const { signIn, signUp, getSetUser, isUserInvalid } = useAuth();
 
   // use states
   const [userStage, setUserStage] = useState<AuthScreenStagesE>(
-    AuthScreenStagesE.REGISTER_STAGE_3
+    AuthScreenStagesE.INTIAL
   );
   const [avatarProgress, setAvatarProgress] = useState(AvatarProgressE.Nothing);
   const [isLoading, setIsLoading] = useState(false);
@@ -117,10 +116,6 @@ const AuthScreen = () => {
         setPrevUserData(null);
 
         await signIn(userData.email, userData.password);
-        if (await authHelpers.authObserver()) {
-          setIsLoading(false);
-          router.replace(AFTER_AUTH_ROUTE_PATH);
-        }
       } else if (
         userStage === AuthScreenStagesE.CHECK_EMAIL_EXISTS &&
         !prevUserData
@@ -146,8 +141,7 @@ const AuthScreen = () => {
         if (prevUserData) {
           userId = prevUserData.userId;
         } else {
-          await signUp(userData.email, userData.password);
-          userId = await authHelpers.authObserver();
+          userId = await signUp(userData.email, userData.password);
         }
 
         if (userId) {
@@ -158,9 +152,10 @@ const AuthScreen = () => {
           console.log("userCreateResp -> ", userCreateResp);
           if (userCreateResp) {
             console.log("user created successfully");
-            // Route user to homepage and save its authentication state
-            router.replace(AFTER_AUTH_ROUTE_PATH);
-            // await getSetUser(userId);
+            await getSetUser(userId);
+          }
+          if (isUserInvalid) {
+            setUserStage(AuthScreenStagesE.REGISTER_STAGE_4);
           }
         }
       } else if (userStage === AuthScreenStagesE.GOOGLE_AUTH) {
@@ -254,7 +249,7 @@ const AuthScreen = () => {
     let profileDownloadUrl = "";
     let resumeDownloadUrl = "";
     let resumeFileName = "";
-    if (profilePic && "isUrl" in profilePic && profilePic["isUrl"]) {
+    if (profilePic && !("isUrl" in profilePic) && !profilePic["isUrl"]) {
       const profileStorageService = new FirebaseStorageService("/profilePics");
       profileDownloadUrl = await handleFileUpload(
         profilePic.uri,
@@ -345,7 +340,7 @@ const AuthScreen = () => {
   useEffect(() => {
     handleProcessing();
   }, [userStage]);
-  console.log("userStage ->", userStage);
+  // console.log("userStage ->", userStage);
 
   useEffect(() => {
     const screenWidth = Dimensions.get("window").width;
