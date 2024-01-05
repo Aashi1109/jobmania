@@ -16,6 +16,7 @@ const CustomModal = ({
       isVisible={modalVisible}
       style={styles.modalContainer}
       onBackdropPress={toggleModal}
+      backdropColor="rgba(0,0,0,.5)"
     >
       {children}
     </Modal>

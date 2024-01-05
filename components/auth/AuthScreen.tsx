@@ -42,7 +42,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 let inputData = {};
 const AuthScreen = () => {
   const { dispatch } = usePopup();
-  const { signIn, signUp, getSetUser, isUserInvalid } = useAuth();
+  const { signIn, signUp, getSetUser } = useAuth();
 
   // use states
   const [userStage, setUserStage] = useState<AuthScreenStagesE>(
@@ -115,7 +115,11 @@ const AuthScreen = () => {
         setIsLoading(true);
         setPrevUserData(null);
 
-        await signIn(userData.email, userData.password);
+        const userId = await signIn(userData.email, userData.password);
+        const authUserData = await getSetUser(userId);
+        if (!authUserData) {
+          setUserStage(AuthScreenStagesE.INTIAL);
+        }
       } else if (
         userStage === AuthScreenStagesE.CHECK_EMAIL_EXISTS &&
         !prevUserData
@@ -152,10 +156,10 @@ const AuthScreen = () => {
           console.log("userCreateResp -> ", userCreateResp);
           if (userCreateResp) {
             console.log("user created successfully");
-            await getSetUser(userId);
-          }
-          if (isUserInvalid) {
-            setUserStage(AuthScreenStagesE.REGISTER_STAGE_4);
+            const authUserData = await getSetUser(userId);
+            if (!authUserData) {
+              setUserStage(AuthScreenStagesE.REGISTER_STAGE_4);
+            }
           }
         }
       } else if (userStage === AuthScreenStagesE.GOOGLE_AUTH) {
@@ -255,6 +259,10 @@ const AuthScreen = () => {
         profilePic.uri,
         profileStorageService
       );
+    } else {
+      if ("isUrl" in profilePic && profilePic["isUrl"]) {
+        profileDownloadUrl = profilePic["url"];
+      }
     }
     if (resumeData) {
       const resumeStorageService = new FirebaseStorageService("/resume");

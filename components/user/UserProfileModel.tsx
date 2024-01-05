@@ -13,12 +13,13 @@ import User from "@/models/User";
 import { formatDate } from "@/utils/helpers/generalHelpers";
 
 const UserProfileModalData = ({ userData }: { userData: User | null }) => {
+  const profileUrl = userData.profileImage.profileUrl;
   return (
     <View style={styles.container}>
       {userData ? (
         <>
           <Image
-            source={{ uri: userData.profileImage.profileUrl }}
+            source={profileUrl ? { uri: profileUrl } : images.profile}
             style={styles.headerPicture}
           />
           <View style={styles.headerInfo}>
@@ -62,7 +63,7 @@ const UserProfileModalData = ({ userData }: { userData: User | null }) => {
                   );
                 }
 
-                return (
+                return value ? (
                   <Pressable
                     key={key}
                     onPress={() => {
@@ -71,7 +72,7 @@ const UserProfileModalData = ({ userData }: { userData: User | null }) => {
                   >
                     {children}
                   </Pressable>
-                );
+                ) : null;
               })}
             <Pressable
               onPress={() => {

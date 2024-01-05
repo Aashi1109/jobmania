@@ -18,7 +18,7 @@ import { usePopup } from "./PopupContext";
 interface AuthContextProps {
   user: User | null; // Replace with your actual user type
   loading: boolean;
-  isUserInvalid: boolean;
+  // isUserInvalid: boolean;
   signIn: (email: string, password: string) => Promise<string>;
   signUp: (email: string, password: string) => Promise<string>;
   signOut: () => Promise<void>;
@@ -44,7 +44,7 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null); // Replace with your actual user type
   const [loading, setLoading] = useState<boolean>(true);
-  const [isUserInvalid, setIsUserInvalid] = useState(false);
+  // const [isUserInvalid, setIsUserInvalid] = useState(false);
   const authHelpers = new AuthHelpers();
   const userFirestore = new UserFirestoreService();
 
@@ -59,28 +59,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const isAuthenticated = await authHelpers.authObserver();
       if (isAuthenticated) {
         // Fetch the latest user data here if needed
-        try {
-          const userData = await userFirestore.getUserById(isAuthenticated);
-          if (userData) {
-            setUser(userData);
-            setIsUserInvalid(false);
-          } else {
-            const isUserDeleted = await authHelpers.deleteUser();
-            if (!isUserDeleted) {
-              dispatchPopup({
-                type: "CREATE_POPUP",
-                payload: { message: "Unable to delete user" },
-              });
-            }
-            dispatchPopup({
-              type: "CREATE_POPUP",
-              payload: { message: "Something went wrong. Try signup again" },
-            });
-            setIsUserInvalid(true);
-          }
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-        }
+        await getSetUser(isAuthenticated);
       }
       setLoading(false);
     };
@@ -100,7 +79,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const userId = await authHelpers.signIn(email, password);
       // Fetch and update user data if needed
-      await getSetUser(userId);
+      // await getSetUser(userId);
       return userId;
     } catch (error) {
       console.error("Error signing in:", error);
@@ -169,6 +148,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const getSetUser = async (userId: string): Promise<User | null> => {
     try {
       const userData = await userFirestore.getUserById(userId);
+
+      if (userData && userId) {
+        setUser(userData);
+        // setIsUserInvalid(false);
+      } else {
+        const isUserDeleted = await authHelpers.deleteUser();
+        if (!isUserDeleted) {
+          dispatchPopup({
+            type: "CREATE_POPUP",
+            payload: { message: "Unable to delete user" },
+          });
+        }
+        dispatchPopup({
+          type: "CREATE_POPUP",
+          payload: { message: "Something went wrong. Try signup again" },
+        });
+        // setIsUserInvalid(true);
+      }
+
       setUser(userData);
       return userData;
     } catch (error) {
@@ -185,7 +183,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     signOut,
     updateUserData,
     getSetUser,
-    isUserInvalid,
+    // isUserInvalid,
   };
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
