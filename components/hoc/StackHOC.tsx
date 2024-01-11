@@ -48,7 +48,12 @@ const StackHOC = ({ children }) => {
         }}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{ flex: 1, padding: SIZES.medium }}>
+        <View
+          style={{
+            flex: 1,
+            padding: SIZES.medium,
+          }}
+        >
           <CustomModal modalVisible={isModalVisible} toggleModal={toggleModal}>
             <UserProfileModalData userData={user} />
           </CustomModal>

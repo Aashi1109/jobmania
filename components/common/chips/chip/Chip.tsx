@@ -13,9 +13,11 @@ const Chip = ({
   return (
     <View style={styles.container}>
       <Text style={styles.text}>{chipData.title}</Text>
-      <Pressable onPress={() => handleClick(chipData)}>
-        <Text style={styles.clear}>&times;</Text>
-      </Pressable>
+      {handleClick && (
+        <Pressable onPress={() => handleClick(chipData)}>
+          <Text style={styles.clear}>&times;</Text>
+        </Pressable>
+      )}
     </View>
   );
 };

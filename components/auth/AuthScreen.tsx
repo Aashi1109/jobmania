@@ -189,7 +189,7 @@ const AuthScreen = () => {
             setAvatarProgress(AvatarProgressE.ImagePresent);
             setUserStage(AuthScreenStagesE.REGISTER);
           } else {
-            router.replace("/(app)/(drawer)/home");
+            await getSetUser(user.uid);
           }
         }
 
@@ -253,25 +253,35 @@ const AuthScreen = () => {
     let profileDownloadUrl = "";
     let resumeDownloadUrl = "";
     let resumeFileName = "";
-    if (profilePic && !("isUrl" in profilePic) && !profilePic["isUrl"]) {
-      const profileStorageService = new FirebaseStorageService("/profilePics");
-      profileDownloadUrl = await handleFileUpload(
-        profilePic.uri,
-        profileStorageService
-      );
-    } else {
-      if ("isUrl" in profilePic && profilePic["isUrl"]) {
-        profileDownloadUrl = profilePic["url"];
+
+    const authHelpers = new AuthHelpers();
+
+    const isUserLoggedIn = await authHelpers.authObserver();
+    if (isUserLoggedIn) {
+      if (profilePic && !("isUrl" in profilePic) && !profilePic["isUrl"]) {
+        const profileStorageService = new FirebaseStorageService(
+          "/profilePics"
+        );
+        profileDownloadUrl = await handleFileUpload(
+          profilePic.uri,
+          profileStorageService
+        );
+      } else {
+        if ("isUrl" in profilePic && profilePic["isUrl"]) {
+          profileDownloadUrl = profilePic["url"];
+        }
       }
-    }
-    if (resumeData) {
-      const resumeStorageService = new FirebaseStorageService("/resume");
-      resumeFileName = resumeData["name"];
-      resumeDownloadUrl = await handleFileUpload(
-        resumeData.uri,
-        resumeStorageService,
-        resumeFileName
-      );
+      if (resumeData) {
+        const resumeStorageService = new FirebaseStorageService("/resume");
+        resumeFileName = resumeData["name"];
+        resumeDownloadUrl = await handleFileUpload(
+          resumeData.uri,
+          resumeStorageService,
+          resumeFileName
+        );
+      }
+    } else {
+      console.warn("Unable to upload profile and resume data");
     }
 
     const newUser = new User({
@@ -284,7 +294,7 @@ const AuthScreen = () => {
         long: null,
         address: inputData["location"]?.trim() || "",
       },
-      description: inputData["description"]?.trim() || "",
+      description: inputData["about"]?.trim() || "",
       skills: inputData["skills"] || [],
       resume: {
         fileName: resumeFileName ?? "",

@@ -31,8 +31,8 @@ const StageFour = ({
   const handleClick = async () => {
     await handleSubmit((data) => {
       setData({ data: data });
+      setData({ stage: AuthScreenStagesE.REGISTER_COMPLETE });
     })();
-    setData({ stage: AuthScreenStagesE.REGISTER_COMPLETE });
   };
   return (
     <StageWrapper

@@ -3,7 +3,7 @@ import { COLORS, SIZES } from "@/constants";
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: Platform.OS === "web" ? 6 : 2,
+    paddingVertical: Platform.OS === "web" ? 6 : 4,
     paddingHorizontal: 10,
     backgroundColor: COLORS.primary,
     borderRadius: 5,

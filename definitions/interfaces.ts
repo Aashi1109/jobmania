@@ -31,12 +31,12 @@ interface IPopup {
 export interface UserModelI {
   fullName?: string;
   userName?: string;
-  profileImage?: { profileUrl: string };
+  profileImage?: { profileUrl: string; createdAt: FieldValue };
   email?: string;
   location?: { lat: number; long: number; address: string };
   description?: string;
-  skills?: Array<string>;
-  resume?: { fileName: string; resumeUrl: string };
+  skills?: SkillItemI[];
+  resume?: { fileName: string; resumeUrl: string; createdAt: FieldValue };
   heading?: string;
   links?: Object;
   appliedJobs?: [];

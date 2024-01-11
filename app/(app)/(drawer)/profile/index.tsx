@@ -1,10 +1,10 @@
 import StackHOC from "@/components/hoc/StackHOC";
-import { Text } from "react-native";
+import ProfileScreen from "@/screens/profilescreen/ProfileScreen";
 
 const index = () => {
   return (
     <StackHOC>
-      <Text>Still in development</Text>
+      <ProfileScreen />
     </StackHOC>
   );
 };

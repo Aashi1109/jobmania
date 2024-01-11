@@ -1,6 +1,13 @@
 import axios from "axios";
-import { err } from "react-native-svg/lib/typescript/xml";
+import * as Clipboard from "expo-clipboard";
+import { Timestamp } from "firebase/firestore";
 
+/**
+ * Generates a random file name with a timestamp and a random string.
+ * @param {string} extension - The file extension.
+ * @param {string} fileName - Optional: The base file name.
+ * @returns {string} - The generated random file name.
+ */
 export function generateRandomFileName(
   extension: string,
   fileName: string = null
@@ -12,9 +19,33 @@ export function generateRandomFileName(
     fileName ? fileName + "@" : ""
   }${timestamp}_${randomString}${extension}`;
 }
-export function formatDate(date) {
-  const options = { day: "numeric", month: "short", year: "numeric" };
-  return date?.toLocaleDateString("en-US", options);
+
+/**
+ * Parses a Firebase Timestamp into a JavaScript Date object.
+ * @param {firebase.firestore.Timestamp | Date} date - The date to be formatted, either a Firebase Timestamp or a Date object.
+ * @returns {string} - The formatted date string or an empty string if the date is not valid.
+ */
+export function formatDate(date: Timestamp | Date | undefined): string {
+  if (!date) {
+    return ""; // Handle missing dates gracefully
+  }
+
+  if (date instanceof Timestamp) {
+    const dateVal = new Date(date.seconds * 1000 + date.nanoseconds / 1000000);
+    return dateVal.toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  } else if (date instanceof Date) {
+    return date.toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  } else {
+    throw new Error("Invalid date type provided"); // Enforce type safety
+  }
 }
 
 /**
@@ -29,7 +60,11 @@ export const processAuthErrorMessage = (error) => {
   } else {
     console.log("fb error -> ", error.code);
     // Convert error code to lowercase for case-insensitive comparison
-    const errorCode = error.code.toLowerCase();
+    const errorCode = error?.code?.toLowerCase();
+
+    if (!errorCode) {
+      return "An error occurred during authentication. Please try again later.";
+    }
 
     // Check if the error code includes a specific substring and return the corresponding message
     if (errorCode.includes("auth/popup-closed-by-user")) {
@@ -54,6 +89,12 @@ export const processAuthErrorMessage = (error) => {
   }
 };
 
+/**
+ * Fetches data using the JSearch API.
+ * @param {string} endPoint - The API endpoint.
+ * @param {object} query - The query parameters.
+ * @returns {Promise<object>} - A promise that resolves to the fetched data.
+ */
 export const fetchDataJSearch = async (endPoint: string, query: object) => {
   const options = {
     method: "GET",
@@ -69,4 +110,22 @@ export const fetchDataJSearch = async (endPoint: string, query: object) => {
 
   const response = await axios.request(options);
   return response?.data?.data;
+};
+
+/**
+ * Copies the passed text to the clipboard.
+ * @param textToCopy string - The text to paste on clipboard
+ * @returns {Promise<void>} - A promise that resolves when the text is copied successfully.
+ */
+export const copyToClipboard = async (textToCopy: string) => {
+  await Clipboard.setStringAsync(textToCopy);
+};
+
+/**
+ * Fetches the text currently stored in the clipboard.
+ * @returns {Promise<string>} - A promise that resolves to the text in the clipboard.
+ */
+export const fetchCopiedText = async () => {
+  const text = await Clipboard.getStringAsync();
+  return text;
 };

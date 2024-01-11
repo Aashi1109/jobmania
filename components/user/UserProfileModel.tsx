@@ -34,8 +34,9 @@ const UserProfileModalData = ({ userData }: { userData: User | null }) => {
               {"Joined on " + formatDate(userData.createdAt?.toDate())}
             </Text>
           )}
-
-          <VerticalDivider width={"100%"} />
+          <View style={{ marginVertical: 15, width: "100%" }}>
+            <VerticalDivider width={"100%"} />
+          </View>
           <View style={styles.footerLogos}>
             {userData.links &&
               Object.entries(userData.links).map(([key, value]) => {
@@ -43,14 +44,14 @@ const UserProfileModalData = ({ userData }: { userData: User | null }) => {
                 if (key === "linkedIn") {
                   children = (
                     <Image
-                      source={icons.linkedIcon}
+                      source={icons.linkedInOutlined}
                       style={styles.footerLogoItem}
                     />
                   );
                 } else if (key === "portfolio") {
                   children = (
                     <Image
-                      source={icons.googleIcon}
+                      source={icons.linkOutlined}
                       style={styles.footerLogoItem}
                     />
                   );
@@ -80,7 +81,10 @@ const UserProfileModalData = ({ userData }: { userData: User | null }) => {
                 Linking.openURL(mailtoUrl);
               }}
             >
-              <Image source={icons.email} style={styles.footerLogoItem} />
+              <Image
+                source={icons.emailOutlined}
+                style={styles.footerLogoItem}
+              />
             </Pressable>
           </View>
         </>

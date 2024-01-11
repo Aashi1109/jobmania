@@ -9,18 +9,23 @@ import { SkillItemI } from "@/definitions/interfaces";
 const ChipList = ({
   chips,
   handleChipClick,
+  isVerticalScroll = true,
+  hideMoreIndicator = false,
 }: {
   chips: SkillItemI[];
   handleChipClick: Function;
+  isVerticalScroll?: boolean;
+  hideMoreIndicator?: boolean;
 }) => {
   const [showAll, setShowAll] = useState(false);
+
   return (
-    <ScrollView style={styles.scrollContainer}>
+    <ScrollView style={styles.scrollContainer} horizontal={!isVerticalScroll}>
       <View style={styles.container}>
         {chips.slice(0, showAll ? chips.length : 3).map((chip) => (
           <Chip key={chip.id} chipData={chip} handleClick={handleChipClick} />
         ))}
-        {chips.length > 3 && (
+        {hideMoreIndicator && chips.length > 3 && (
           <Pressable
             style={{ alignSelf: "center" }}
             onPress={() => setShowAll(!showAll)}

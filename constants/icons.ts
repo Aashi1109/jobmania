@@ -19,6 +19,17 @@ import home from "../assets/icons/home.png";
 import profileIcon from "../assets/icons/profileIcon.png";
 import moveUp from "../assets/icons/moveUp.png";
 import email from "../assets/icons/email.png";
+import emailOutlined from "../assets/icons/email-outlined.png";
+import linkedInOutlined from "../assets/icons/linkedin-outlined.png";
+import skillsOutlined from "../assets/icons/skills-outlined.png";
+import educationOutlined from "../assets/icons/education-outlined.png";
+import copyOutlined from "../assets/icons/copy-outlined.png";
+import checkOutlined from "../assets/icons/check-outlined.png";
+import infoOutlined from "../assets/icons/info-outlined.png";
+import usernameOutlined from "../assets/icons/username-outlined.png";
+import resumeOutlined from "../assets/icons/resume-outlined.png";
+import githubOutlined from "../assets/icons/github-outlined.png";
+import linkOutlined from "../assets/icons/link-outlined.png";
 
 export default {
   heart,
@@ -42,4 +53,15 @@ export default {
   saved,
   home,
   moveUp,
+  emailOutlined,
+  linkedInOutlined,
+  skillsOutlined,
+  educationOutlined,
+  copyOutlined,
+  checkOutlined,
+  infoOutlined,
+  usernameOutlined,
+  resumeOutlined,
+  githubOutlined,
+  linkOutlined,
 };

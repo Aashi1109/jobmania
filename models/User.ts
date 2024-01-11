@@ -1,4 +1,4 @@
-import { UserModelI } from "@/definitions/interfaces";
+import { SkillItemI, UserModelI } from "@/definitions/interfaces";
 import { serverTimestamp, FieldValue } from "firebase/firestore";
 
 class User {
@@ -11,7 +11,7 @@ class User {
   resume: { fileName: string; resumeUrl: string; createdAt: FieldValue };
   description: string;
   heading: string;
-  skills: Array<string>;
+  skills: SkillItemI[];
   appliedJobs: Array<{
     appliedDate: FieldValue;
     status: "In Process" | "Applied" | "Rejected";
@@ -24,22 +24,35 @@ class User {
     job_title: string;
     job_employment_type: string;
   }>;
-  links: Object;
+  links: object;
 
-  constructor(userData: UserModelI) {
+  constructor(userData: UserModelI, isFetchData = false) {
     this.id = userData.id;
     this.userName = userData.userName;
     this.fullName = userData.fullName;
     this.profileImage = {
       ...userData.profileImage,
-      createdAt: serverTimestamp(),
+      createdAt: isFetchData
+        ? userData.profileImage.createdAt
+        : userData.profileImage.profileUrl
+        ? serverTimestamp()
+        : null,
     };
+
     this.location = userData.location;
     this.description = userData.description;
     this.skills = userData.skills;
     this.appliedJobs = userData.appliedJobs;
     this.email = userData.email;
-    this.resume = { ...userData.resume, createdAt: serverTimestamp() };
+
+    this.resume = {
+      ...userData.resume,
+      createdAt: isFetchData
+        ? userData.resume.createdAt
+        : userData.resume.resumeUrl
+        ? serverTimestamp()
+        : null,
+    };
     this.heading = userData.heading;
     this.createdAt = userData.createdAt ?? serverTimestamp();
     this.links = userData.links;
@@ -67,22 +80,25 @@ export const userConverter = {
   },
   fromFirestore: (snapshot: any, options: any): User => {
     const data = snapshot.data(options);
-    return new User({
-      fullName: data.fullName,
-      userName: data.userName,
-      profileImage: data.profileImage,
-      email: data.email,
-      location: data.location,
-      description: data.description,
-      skills: data.skills,
-      resume: data.resume,
-      heading: data.heading,
-      links: data.links,
-      appliedJobs: data.appliedJobs,
-      savedJobs: data.savedJobs,
-      createdAt: data.createdAt,
-      id: snapshot.id,
-    });
+    return new User(
+      {
+        fullName: data.fullName,
+        userName: data.userName,
+        profileImage: data.profileImage,
+        email: data.email,
+        location: data.location,
+        description: data.description,
+        skills: data.skills,
+        resume: data.resume,
+        heading: data.heading,
+        links: data.links,
+        appliedJobs: data.appliedJobs,
+        savedJobs: data.savedJobs,
+        createdAt: data.createdAt,
+        id: snapshot.id,
+      },
+      true
+    );
   },
 };
 
