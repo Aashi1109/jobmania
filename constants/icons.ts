@@ -30,6 +30,7 @@ import usernameOutlined from "../assets/icons/username-outlined.png";
 import resumeOutlined from "../assets/icons/resume-outlined.png";
 import githubOutlined from "../assets/icons/github-outlined.png";
 import linkOutlined from "../assets/icons/link-outlined.png";
+import xOutlined from "../assets/icons/x-outlined.png";
 
 export default {
   heart,
@@ -64,4 +65,5 @@ export default {
   resumeOutlined,
   githubOutlined,
   linkOutlined,
+  xOutlined,
 };

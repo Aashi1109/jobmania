@@ -2,41 +2,44 @@ import ChipList from "@/components/common/chips/chiplist/ChipList";
 import { useAuth } from "@/context/AuthContext";
 import { Image, Pressable, Text, View } from "react-native";
 import styles from "./profilescreen.style";
-import { VerticalDivider } from "@/components";
+import { CustomModal, VerticalDivider } from "@/components";
 import { COLORS, SIZES, icons } from "@/constants";
 import HeadingCard from "@/components/common/cards/HeadingCard";
 import { formatDate } from "@/utils/helpers/generalHelpers";
 
 import TextWithCopy from "@/components/common/textwithcopy/TextWithCopy";
 import Chip from "@/components/common/chips/chip/Chip";
+import { useState } from "react";
+import EditDataModal from "@/components/common/editdata/EditDataModal";
+import { ProfileEditE } from "@/definitions/enums";
 
 const ProfileScreen = () => {
+  // states
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentEditingField, setCurrentEditingField] =
+    useState<ProfileEditE>(null);
+
+  // Context
   const { user } = useAuth();
 
+  // User data
   const profileImage = user.profileImage.profileUrl;
   const userSkills = user.skills;
   const resumeData = user.resume;
   const resumeName = resumeData.fileName;
 
+  // Functions
+  const toogleModal = () => {
+    setIsModalOpen((prevState) => !prevState);
+  };
+
   return (
     <View style={styles.container}>
-      {/* <HeadingCard
-        paddingHorizontal={0}
-        paddingVertical={0}
-        handleEditPress={null}
-        cardHeading="Basic Info"
-      > */}
       <View style={styles.profileContainer}>
         <Image source={{ uri: profileImage }} style={styles.image} />
         <View style={styles.rightContainer}>
           <Text style={styles.nameText}>{user.fullName}</Text>
           <Text style={styles.headingText}>{user.heading}</Text>
-          {/* <ChipList
-            chips={user.skills}
-            handleChipClick={null}
-            isVerticalScroll={false}
-            hideMoreIndicator={true}
-          /> */}
 
           {user.createdAt && (
             <Text style={{ color: COLORS.gray }}>
@@ -56,112 +59,77 @@ const ProfileScreen = () => {
 
       {/* More details of user */}
       <View style={styles.bottomContainer}>
-        {/* <VerticalDivider
-          height={1}
-          width={"100%"}
-          backgroundColor={"rgba(0,0,0,.1)"}
-        /> */}
         {user.userName && (
           <HeadingCard
             cardHeading="Username"
-            handleEditPress={null}
-            iconData={icons.usernameOutlined}
+            handleRightButtonClick={null}
+            leftIconData={icons.usernameOutlined}
           >
             <TextWithCopy text={user.userName} />
           </HeadingCard>
         )}
         {user.email && (
-          <>
-            {/* <VerticalDivider
-              height={6}
-              width={"100%"}
-              backgroundColor={"rgba(0,0,0,.1)"}
-            /> */}
-            <HeadingCard
-              cardHeading="Email"
-              handleEditPress={null}
-              iconData={icons.emailOutlined}
-            >
-              <TextWithCopy text={user.email} />
-            </HeadingCard>
-          </>
+          <HeadingCard
+            cardHeading="Email"
+            handleRightButtonClick={null}
+            leftIconData={icons.emailOutlined}
+          >
+            <TextWithCopy text={user.email} />
+          </HeadingCard>
         )}
         {user.description && (
-          <>
-            {/* <VerticalDivider
-              height={6}
-              width={"100%"}
-              backgroundColor={"rgba(0,0,0,.1)"}
-            /> */}
-            <HeadingCard
-              cardHeading="Description"
-              handleEditPress={null}
-              iconData={icons.infoOutlined}
-            >
-              <Text>{user.description}</Text>
-            </HeadingCard>
-          </>
+          <HeadingCard
+            cardHeading="Description"
+            handleRightButtonClick={null}
+            leftIconData={icons.infoOutlined}
+          >
+            <Text>{user.description}</Text>
+          </HeadingCard>
         )}
         {userSkills?.length && (
-          <>
-            {/* <VerticalDivider
-              height={6}
-              width={"100%"}
-              backgroundColor={"rgba(0,0,0,.1)"}
-            /> */}
-            <HeadingCard
-              cardHeading="Skills"
-              handleEditPress={null}
-              iconData={icons.skillsOutlined}
-            >
-              <ChipList chips={userSkills} handleChipClick={null} />
-            </HeadingCard>
-          </>
+          <HeadingCard
+            cardHeading="Skills"
+            handleRightButtonClick={null}
+            leftIconData={icons.skillsOutlined}
+          >
+            <ChipList chips={userSkills} handleChipClick={null} />
+          </HeadingCard>
         )}
         {user.location.address && (
-          <>
-            {/* <VerticalDivider
-              height={6}
-              width={"100%"}
-              backgroundColor={"rgba(0,0,0,.1)"}
-            /> */}
-            <HeadingCard
-              cardHeading="Location"
-              handleEditPress={null}
-              iconData={icons.location}
-            >
-              <Text>{user?.location?.address ?? "N/A"}</Text>
-            </HeadingCard>
-          </>
+          <HeadingCard
+            cardHeading="Location"
+            handleRightButtonClick={null}
+            leftIconData={icons.location}
+          >
+            <Text>{user?.location?.address ?? "N/A"}</Text>
+          </HeadingCard>
         )}
         {resumeName && (
-          <>
-            {/* <VerticalDivider
-              height={6}
-              width={"100%"}
-              backgroundColor={"rgba(0,0,0,.1)"}
-            /> */}
-            <HeadingCard
-              cardHeading="Resume Details"
-              handleEditPress={null}
-              iconData={icons.resumeOutlined}
-            >
-              <View style={{ gap: 5 }}>
-                <Chip
-                  chipData={{ id: Date.now(), title: resumeName }}
-                  handleClick={null}
-                />
-                <Text style={{ fontSize: SIZES.small }}>
-                  Last updated on{" "}
-                  <Text style={{ fontSize: SIZES.small, fontStyle: "italic" }}>
-                    {formatDate(resumeData.createdAt?.toDate())}
-                  </Text>
+          <HeadingCard
+            cardHeading="Resume Details"
+            handleRightButtonClick={null}
+            leftIconData={icons.resumeOutlined}
+          >
+            <View style={{ gap: 5 }}>
+              <Chip
+                chipData={{ id: Date.now(), title: resumeName }}
+                handleClick={null}
+              />
+              <Text style={{ fontSize: SIZES.small }}>
+                Last updated on{" "}
+                <Text style={{ fontSize: SIZES.small, fontStyle: "italic" }}>
+                  {formatDate(resumeData.createdAt?.toDate())}
                 </Text>
-              </View>
-            </HeadingCard>
-          </>
+              </Text>
+            </View>
+          </HeadingCard>
         )}
       </View>
+
+      {/* Modal to edit and save data */}
+      <CustomModal modalVisible={isModalOpen} toggleModal={toogleModal}>
+        <EditDataModal />
+      </CustomModal>
     </View>
   );
 };

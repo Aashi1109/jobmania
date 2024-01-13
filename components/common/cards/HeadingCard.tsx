@@ -13,8 +13,9 @@ import {
 const HeadingCard: React.FC<{
   children: React.ReactNode;
   cardHeading: string;
-  iconData: any;
-  handleEditPress: (event: GestureResponderEvent) => void;
+  leftIconData?: any;
+  rightIconData?: any;
+  handleRightButtonClick: (event: GestureResponderEvent) => void;
   borderRadius?: number;
   paddingVertical?: number;
   paddingHorizontal?: number;
@@ -22,8 +23,9 @@ const HeadingCard: React.FC<{
 }> = ({
   children,
   cardHeading,
-  iconData,
-  handleEditPress,
+  leftIconData,
+  handleRightButtonClick,
+  rightIconData,
   borderRadius = 10,
   paddingVertical = SIZES.large,
   paddingHorizontal = SIZES.large,
@@ -39,16 +41,18 @@ const HeadingCard: React.FC<{
     >
       <View style={styles.headContainer}>
         <View style={styles.headLeftContainer}>
-          <Image
-            style={styles.iconImage}
-            source={iconData}
-            resizeMode="contain"
-          />
+          {leftIconData && (
+            <Image
+              style={styles.iconImage}
+              source={leftIconData}
+              resizeMode="contain"
+            />
+          )}
           <Text style={styles.headingText}>{cardHeading}</Text>
         </View>
-        <Pressable onPress={handleEditPress}>
+        <Pressable onPress={handleRightButtonClick}>
           <Image
-            source={icons.editIcon}
+            source={rightIconData ?? icons.editIcon}
             style={styles.iconImage}
             resizeMode="contain"
           />
@@ -69,6 +73,7 @@ const styles = StyleSheet.create({
     fontSize: SIZES.small,
     textAlign: "auto",
     alignSelf: "center",
+    fontWeight: "bold",
   },
   headLeftContainer: {
     flexDirection: "row",

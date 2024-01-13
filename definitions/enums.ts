@@ -22,6 +22,33 @@ enum AvatarProgressE {
   Complete = 1,
 }
 
+export enum UserFormFieldKeysE {
+  FNKey = "fullName",
+  UNKey = "userName",
+  PIKey = "profileImage",
+  EmailKey = "email",
+  LocationKey = "location",
+  DescriptionKey = "description",
+  SkillsKey = "skills",
+  ResumeKey = "resume",
+  HeadingKey = "heading",
+  LinksKey = "links",
+  AppliedJobsKey = "appliedJobs",
+  SavedJobskey = "savedJobs",
+  CreatedAtKey = "createdAt",
+  IdKey = "id",
+}
+
+export enum ProfileEditE {
+  PROFILE = "profile",
+  EMAIL = "email",
+  LOCATION = "location",
+  DESCRIPTION = "description",
+  SKILLS = "skills",
+  RESUME = "resume",
+  EDUCATION = "education",
+}
+
 export enum AuthProviderE {
   Google,
 }

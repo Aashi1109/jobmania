@@ -22,7 +22,7 @@ export function generateRandomFileName(
 
 /**
  * Parses a Firebase Timestamp into a JavaScript Date object.
- * @param {firebase.firestore.Timestamp | Date} date - The date to be formatted, either a Firebase Timestamp or a Date object.
+ * @param {Timestamp | Date} date - The date to be formatted, either a Firebase Timestamp or a Date object.
  * @returns {string} - The formatted date string or an empty string if the date is not valid.
  */
 export function formatDate(date: Timestamp | Date | undefined): string {

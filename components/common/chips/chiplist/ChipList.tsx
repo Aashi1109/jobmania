@@ -25,7 +25,7 @@ const ChipList = ({
         {chips.slice(0, showAll ? chips.length : 3).map((chip) => (
           <Chip key={chip.id} chipData={chip} handleClick={handleChipClick} />
         ))}
-        {hideMoreIndicator && chips.length > 3 && (
+        {!hideMoreIndicator && chips.length > 3 && (
           <Pressable
             style={{ alignSelf: "center" }}
             onPress={() => setShowAll(!showAll)}
