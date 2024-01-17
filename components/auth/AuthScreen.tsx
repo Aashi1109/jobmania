@@ -22,6 +22,7 @@ import AuthHelpers from "@/firebase/firebaseAuth";
 import FirebaseStorageService from "@/firebase/firebaseStorage";
 import {
   generateRandomFileName,
+  handleFileUpload,
   processAuthErrorMessage,
 } from "@/utils/helpers/generalHelpers";
 import StageTwo from "./registerStages/stage2/StageTwo";
@@ -38,6 +39,10 @@ import {
   iosClientId,
 } from "@/firebase/firebaseConfig";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import {
+  PROFILE_STORAGE_PARENT_PATH,
+  RESUME_STORAGE_PARENT_PATH,
+} from "@/constants";
 
 let inputData = {};
 const AuthScreen = () => {
@@ -227,23 +232,6 @@ const AuthScreen = () => {
     }
   };
 
-  const handleFileUpload = async (
-    uri: string,
-    storageService,
-    fileName: string = null
-  ) => {
-    const r = await fetch(uri);
-    const b = await r.blob();
-    const mimetype = b.type;
-    const fileFormat = mimetype.split("/")[1] ?? "png";
-    const downloadUrl = await storageService.uploadFile(
-      b,
-      generateRandomFileName("." + fileFormat, fileName)
-    );
-
-    return downloadUrl;
-  };
-
   const processUserDataAndDoEntry = async (
     userId: string,
     userDBHelpers: any
@@ -260,7 +248,7 @@ const AuthScreen = () => {
     if (isUserLoggedIn) {
       if (profilePic && !("isUrl" in profilePic) && !profilePic["isUrl"]) {
         const profileStorageService = new FirebaseStorageService(
-          "/profilePics"
+          PROFILE_STORAGE_PARENT_PATH
         );
         profileDownloadUrl = await handleFileUpload(
           profilePic.uri,
@@ -272,7 +260,9 @@ const AuthScreen = () => {
         }
       }
       if (resumeData) {
-        const resumeStorageService = new FirebaseStorageService("/resume");
+        const resumeStorageService = new FirebaseStorageService(
+          RESUME_STORAGE_PARENT_PATH
+        );
         resumeFileName = resumeData["name"];
         resumeDownloadUrl = await handleFileUpload(
           resumeData.uri,

@@ -33,102 +33,123 @@ const ProfileScreen = () => {
     setIsModalOpen((prevState) => !prevState);
   };
 
+  const handleEditField = (editingField: ProfileEditE) => {
+    return () => {
+      setIsModalOpen(true);
+      setCurrentEditingField(editingField);
+    };
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.profileContainer}>
-        <Image source={{ uri: profileImage }} style={styles.image} />
-        <View style={styles.rightContainer}>
-          <Text style={styles.nameText}>{user.fullName}</Text>
-          <Text style={styles.headingText}>{user.heading}</Text>
-
-          {user.createdAt && (
-            <Text style={{ color: COLORS.gray }}>
-              {"Active since " + formatDate(user.createdAt?.toDate())}
-            </Text>
-          )}
-        </View>
-        <Pressable onPress={null}>
-          <Image
-            source={icons.editIcon}
-            resizeMode="contain"
-            style={styles.editIcon}
-          />
-        </Pressable>
-      </View>
       {/* </HeadingCard> */}
 
       {/* More details of user */}
       <View style={styles.bottomContainer}>
-        {user.userName && (
-          <HeadingCard
-            cardHeading="Username"
-            handleRightButtonClick={null}
-            leftIconData={icons.usernameOutlined}
-          >
-            <TextWithCopy text={user.userName} />
-          </HeadingCard>
-        )}
-        {user.email && (
-          <HeadingCard
-            cardHeading="Email"
-            handleRightButtonClick={null}
-            leftIconData={icons.emailOutlined}
-          >
-            <TextWithCopy text={user.email} />
-          </HeadingCard>
-        )}
-        {user.description && (
-          <HeadingCard
-            cardHeading="Description"
-            handleRightButtonClick={null}
-            leftIconData={icons.infoOutlined}
-          >
-            <Text>{user.description}</Text>
-          </HeadingCard>
-        )}
-        {userSkills?.length && (
-          <HeadingCard
-            cardHeading="Skills"
-            handleRightButtonClick={null}
-            leftIconData={icons.skillsOutlined}
-          >
-            <ChipList chips={userSkills} handleChipClick={null} />
-          </HeadingCard>
-        )}
-        {user.location.address && (
-          <HeadingCard
-            cardHeading="Location"
-            handleRightButtonClick={null}
-            leftIconData={icons.location}
-          >
-            <Text>{user?.location?.address ?? "N/A"}</Text>
-          </HeadingCard>
-        )}
-        {resumeName && (
-          <HeadingCard
-            cardHeading="Resume Details"
-            handleRightButtonClick={null}
-            leftIconData={icons.resumeOutlined}
-          >
-            <View style={{ gap: 5 }}>
-              <Chip
-                chipData={{ id: Date.now(), title: resumeName }}
-                handleClick={null}
-              />
-              <Text style={{ fontSize: SIZES.small }}>
-                Last updated on{" "}
-                <Text style={{ fontSize: SIZES.small, fontStyle: "italic" }}>
-                  {formatDate(resumeData.createdAt?.toDate())}
+        <HeadingCard
+          cardHeading="General"
+          handleRightButtonClick={handleEditField(ProfileEditE.PROFILE)}
+          leftIconData={icons.emailOutlined}
+        >
+          <View style={styles.profileContainer}>
+            <Image source={{ uri: profileImage }} style={styles.image} />
+            <View style={styles.rightContainer}>
+              <Text style={styles.nameText}>{user.fullName}</Text>
+              <Text style={styles.headingText}>{user.heading}</Text>
+
+              {user.createdAt && (
+                <Text style={{ color: COLORS.gray }}>
+                  {"Active since " + formatDate(user.createdAt?.toDate())}
                 </Text>
-              </Text>
+              )}
             </View>
-          </HeadingCard>
-        )}
+            {/* <Pressable onPress={handleEditField(ProfileEditE.PROFILE)}> */}
+            {/* <Image
+              source={icons.editIcon}
+              resizeMode="contain"
+              style={styles.editIcon}
+            /> */}
+            {/* </Pressable> */}
+          </View>
+        </HeadingCard>
+
+        <HeadingCard
+          cardHeading="Username"
+          handleRightButtonClick={handleEditField(ProfileEditE.USERNAME)}
+          leftIconData={icons.usernameOutlined}
+        >
+          <TextWithCopy text={user.userName || "N/A"} />
+        </HeadingCard>
+
+        <HeadingCard
+          cardHeading="Email"
+          handleRightButtonClick={null}
+          leftIconData={icons.emailOutlined}
+        >
+          <TextWithCopy text={user.email || "N/A"} />
+        </HeadingCard>
+
+        <HeadingCard
+          cardHeading="Description"
+          handleRightButtonClick={handleEditField(ProfileEditE.DESCRIPTION)}
+          leftIconData={icons.infoOutlined}
+        >
+          <Text>{user.description || "N/A"}</Text>
+        </HeadingCard>
+
+        <HeadingCard
+          cardHeading="Skills"
+          handleRightButtonClick={handleEditField(ProfileEditE.SKILLS)}
+          leftIconData={icons.skillsOutlined}
+        >
+          {userSkills?.length ? (
+            <ChipList chips={userSkills} handleChipClick={null} />
+          ) : (
+            <Text>No skills found</Text>
+          )}
+        </HeadingCard>
+
+        <HeadingCard
+          cardHeading="Location"
+          handleRightButtonClick={handleEditField(ProfileEditE.LOCATION)}
+          leftIconData={icons.location}
+        >
+          <Text>{user?.location?.address ?? "N/A"}</Text>
+        </HeadingCard>
+
+        <HeadingCard
+          cardHeading="Resume Details"
+          handleRightButtonClick={handleEditField(ProfileEditE.RESUME)}
+          leftIconData={icons.resumeOutlined}
+        >
+          <View style={{ gap: 5 }}>
+            {resumeData ? (
+              <>
+                <Chip
+                  chipData={{ id: Date.now(), title: resumeName }}
+                  handleClick={null}
+                />
+                <Text style={{ fontSize: SIZES.small }}>
+                  Last updated on{" "}
+                  <Text style={{ fontSize: SIZES.small, fontStyle: "italic" }}>
+                    {formatDate(resumeData.createdAt?.toDate()) ?? "N/A"}
+                  </Text>
+                </Text>
+              </>
+            ) : (
+              <Text>No resume found</Text>
+            )}
+          </View>
+        </HeadingCard>
       </View>
 
       {/* Modal to edit and save data */}
       <CustomModal modalVisible={isModalOpen} toggleModal={toogleModal}>
-        <EditDataModal />
+        <EditDataModal
+          currentEditingField={currentEditingField}
+          toogleModal={toogleModal}
+          prevData={user}
+        />
       </CustomModal>
     </View>
   );

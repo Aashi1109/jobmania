@@ -142,3 +142,7 @@ export const skillsList = [
     title: "Remote work experience",
   },
 ];
+
+export const RESUME_STORAGE_PARENT_PATH = "/resume";
+export const PROFILE_STORAGE_PARENT_PATH = "/profilePics";
+export const POPUP_VISIBLE_TIME = 5000;

@@ -3,8 +3,9 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     gap: 10,
-    flex: 1,
+    // flex: 1,
     position: "relative",
+    width: "100%",
   },
   input: {
     height: 45,
@@ -27,6 +28,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 4,
     elevation: 5,
+
     maxHeight: 200,
     // position: "absolute",
     // top: 0,

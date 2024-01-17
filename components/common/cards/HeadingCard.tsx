@@ -50,13 +50,15 @@ const HeadingCard: React.FC<{
           )}
           <Text style={styles.headingText}>{cardHeading}</Text>
         </View>
-        <Pressable onPress={handleRightButtonClick}>
-          <Image
-            source={rightIconData ?? icons.editIcon}
-            style={styles.iconImage}
-            resizeMode="contain"
-          />
-        </Pressable>
+        {handleRightButtonClick && (
+          <Pressable onPress={handleRightButtonClick}>
+            <Image
+              source={rightIconData ?? icons.editIcon}
+              style={styles.iconImage}
+              resizeMode="contain"
+            />
+          </Pressable>
+        )}
       </View>
       <View style={styles.children}>{children}</View>
     </BasicCard>

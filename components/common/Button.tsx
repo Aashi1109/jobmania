@@ -26,7 +26,7 @@ const Button = ({
 }) => {
   return (
     <Pressable onPress={handleClick} disabled={isDisabled}>
-      <View style={[styles.container, { flex: 1, padding, backgroundColor }]}>
+      <View style={[styles.container, { padding, backgroundColor }]}>
         {isLoading ? (
           <ActivityIndicator size={"small"} color={COLORS.lightWhite} />
         ) : (

@@ -3,7 +3,7 @@ import { useRef, useEffect } from "react";
 import { View, Text, Animated, Platform } from "react-native";
 
 import { CheckboxIcon, InfoIcon, WarningIcon } from "../common/iconcomponents";
-import { SIZES } from "@/constants";
+import { POPUP_VISIBLE_TIME, SIZES } from "@/constants";
 import styles from "./popup.styles";
 
 const calImgSrc = (type: string, svgProperty: object): any => {
@@ -15,7 +15,6 @@ const calImgSrc = (type: string, svgProperty: object): any => {
 
 const OPACITY_ANIM_DURATION = 500;
 const TRANSLATE_Y_ANIM_DURATION = 500;
-const POPUP_TOTAL_SHOWN_TIME = 5000;
 
 const Popup = () => {
   const translateYAnim = useRef(new Animated.Value(-100)).current;
@@ -56,7 +55,7 @@ const Popup = () => {
             useNativeDriver: true,
           }),
         ]).start();
-      }, POPUP_TOTAL_SHOWN_TIME);
+      }, POPUP_VISIBLE_TIME);
 
       // Clear the timeout when the component unmounts or when showPopup changes
       return () => clearTimeout(timeout);
@@ -70,7 +69,7 @@ const Popup = () => {
       <View style={styles.popupContent}>
         {showPopup &&
           popups
-            .filter((filPop) => Date.now() - filPop.id! <= 5000)
+            .filter((filPop) => Date.now() - filPop.id! <= POPUP_VISIBLE_TIME)
             .map((popup, index) => (
               <Animated.View
                 key={index}

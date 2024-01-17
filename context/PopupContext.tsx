@@ -1,3 +1,4 @@
+import { POPUP_VISIBLE_TIME } from "@/constants";
 import { IPopup } from "@/definitions/interfaces";
 import React, { createContext, useContext, useReducer, ReactNode } from "react";
 
@@ -22,20 +23,22 @@ const PopupContext = createContext<
 const popupReducer = (state: IPopup, action: PopupAction): IPopup => {
   switch (action.type) {
     case "CREATE_POPUP":
-      const diff = Date.now() - (state.prevPopupTime || 0);
-      if (state.count > 5 && diff > 5000) {
-        return {
-          ...state,
-          popups: [],
-          count: 0,
-        };
+      const popupId = Date.now();
+      const sameTextPopup = state.popups.find(
+        (popup) =>
+          popup.message === action.payload.message &&
+          popupId - popup.id < POPUP_VISIBLE_TIME
+      );
+
+      if (sameTextPopup) {
+        return state;
       }
       return {
         ...state,
         count: state.count + 1,
         prevPopupTime: Date.now(),
         showPopup: true,
-        popups: [...state.popups, { ...action.payload, id: Date.now() }],
+        popups: [...state.popups, { ...action.payload, id: popupId }],
       };
     case "RESET_POPUP":
       return popupInitialState;

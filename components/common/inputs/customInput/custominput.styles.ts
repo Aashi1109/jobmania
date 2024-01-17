@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     gap: 7,
   },
   input: {
-    height: 45,
+    // height: 45,
     width: "100%",
     borderRadius: 5,
     backgroundColor: COLORS.inputBgColor,

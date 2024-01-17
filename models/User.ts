@@ -33,7 +33,7 @@ class User {
     this.profileImage = {
       ...userData.profileImage,
       createdAt: isFetchData
-        ? userData.profileImage.createdAt
+        ? userData.profileImage?.createdAt
         : userData.profileImage.profileUrl
         ? serverTimestamp()
         : null,
@@ -48,7 +48,7 @@ class User {
     this.resume = {
       ...userData.resume,
       createdAt: isFetchData
-        ? userData.resume.createdAt
+        ? userData.resume?.createdAt
         : userData.resume.resumeUrl
         ? serverTimestamp()
         : null,

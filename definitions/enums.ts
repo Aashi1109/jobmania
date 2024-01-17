@@ -40,13 +40,14 @@ export enum UserFormFieldKeysE {
 }
 
 export enum ProfileEditE {
-  PROFILE = "profile",
-  EMAIL = "email",
-  LOCATION = "location",
-  DESCRIPTION = "description",
-  SKILLS = "skills",
-  RESUME = "resume",
-  EDUCATION = "education",
+  USERNAME,
+  PROFILE,
+  EMAIL,
+  LOCATION,
+  DESCRIPTION,
+  SKILLS,
+  RESUME,
+  EDUCATION,
 }
 
 export enum AuthProviderE {

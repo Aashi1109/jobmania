@@ -9,9 +9,9 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   editIcon: {
-    position: "absolute",
-    top: 10,
-    right: 20,
+    // position: "absolute",
+    // top: 10,
+    // right: 20,
     height: SIZES.medium,
     width: SIZES.medium,
     tintColor: COLORS.primary,

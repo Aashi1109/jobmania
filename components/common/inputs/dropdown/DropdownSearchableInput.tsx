@@ -15,11 +15,19 @@ const DropdownContentText = ({ textLabel, handlePress }) => {
     </TouchableOpacity>
   );
 };
-const DropdownSearchableInput = ({ setData }: { setData: Function }) => {
+const DropdownSearchableInput = ({
+  setData,
+  prevData,
+}: {
+  setData: Function;
+  prevData?: SkillItemI[];
+}) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState(skillsList);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const [selectedItems, setSelectedItems] = useState<SkillItemI[]>([]);
+  const [selectedItems, setSelectedItems] = useState<SkillItemI[]>(
+    prevData ?? []
+  );
 
   const handleSearchQuery = (queryText: string) => {
     setSearchQuery(queryText);

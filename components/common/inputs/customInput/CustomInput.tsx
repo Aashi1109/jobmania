@@ -12,6 +12,7 @@ interface CustomInputProps {
   labelText?: string;
   hideText?: boolean;
   editable?: boolean;
+  numberOfLines?: number;
 }
 const CustomInput = ({
   label,
@@ -21,6 +22,7 @@ const CustomInput = ({
   placeholder,
   errors,
   editable = true,
+  numberOfLines,
 }: CustomInputProps) => {
   return (
     <View style={styles.container}>
@@ -39,6 +41,9 @@ const CustomInput = ({
             onBlur={onBlur}
             value={value}
             secureTextEntry={hideText}
+            numberOfLines={numberOfLines ?? 1}
+            multiline={true}
+            textAlignVertical={numberOfLines > 1 ? "top" : "center"}
             placeholderTextColor={COLORS.inputPlaceHolderColor}
           />
         )}

@@ -129,3 +129,29 @@ export const fetchCopiedText = async () => {
   const text = await Clipboard.getStringAsync();
   return text;
 };
+
+/**
+ * Handles the upload of a file from a given URI to a storage service.
+ *
+ * @param {string} uri - The URI of the file to be uploaded.
+ * @param {object} storageService - The storage service object responsible for file uploads.
+ * @param {string} [fileName=null] - Optional: The desired file name. If not provided, a random file name will be generated.
+ * @returns {Promise<string>} A Promise that resolves to the download URL of the uploaded file.
+ * @throws {Error} Throws an error if the file upload fails.
+ */
+export const handleFileUpload = async (
+  uri: string,
+  storageService,
+  fileName: string = null
+) => {
+  const r = await fetch(uri);
+  const b = await r.blob();
+  const mimetype = b.type;
+  const fileFormat = mimetype.split("/")[1] ?? "png";
+  const downloadUrl = await storageService.uploadFile(
+    b,
+    generateRandomFileName("." + fileFormat, fileName)
+  );
+
+  return downloadUrl;
+};
